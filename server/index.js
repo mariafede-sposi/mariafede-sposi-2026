@@ -18,6 +18,15 @@ const pool = new Pool({
 app.post('/send-email', async (req, res) => {
   const { message } = req.body;
 
+// Controllo la presenza del campo destinatario_mail
+if (!destinatario_mail || !corpo_mail) {
+  return res.status(400).send('Destinatario o campi necessari, mancanti');
+}
+// validazione email
+if (!destinatario_mail.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) {
+    return res.status(400).send('Email non valida');
+}
+  
   // 1. Invia mail
   try {
     const transporter = nodemailer.createTransport({
@@ -30,15 +39,15 @@ app.post('/send-email', async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_TO,
+      to: destinatario_mail,
       subject: 'Messaggio dal sito matrimonio',
-      text: message,
+      text: corpo_mail,
     });
 
     // 2. Salva nel DB
     await pool.query(
-      'INSERT INTO messaggi (contenuto, data_invio) VALUES ($1, NOW())',
-      [message]
+      'INSERT INTO messaggi (destinatario, contenuto, data_invio) VALUES ($1, $2, NOW())',
+      [destinatario_mail, corpo_mail]
     );
 
     res.status(200).send('Email inviata e messaggio salvato');
