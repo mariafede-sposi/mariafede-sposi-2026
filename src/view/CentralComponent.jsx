@@ -1,39 +1,39 @@
-import React, { useState } from 'react'
-import { Siderbar } from './Siderbar';
-import { Navbar } from './Navbar';
-import { ChiSiamo } from './menu/ChiSiamo';
-import { InformazioniGenerali } from './menu/InformazioniGenerali';
-import { IlRicevimento } from './menu/IlRicevimento';
-import { LaChiesa } from './menu/LaChiesa';
-import { Partecipazione } from './menu/Partecipazione';
-import { Regali } from './menu/Regali';
+import React from 'react';
 
-export const CentralComponent = ({ }) => {
+import ChiSiamo from './menu/ChiSiamo';
+import InformazioniGenerali from './menu/InformazioniGenerali';
+import LaChiesa from './menu/LaChiesa';
+import IlRicevimento from './menu/IlRicevimento';
+import Partecipazione from './menu/Partecipazione';
+import Regali from './menu/Regali';
+import FadeInWrapper from './FadeInWrapper';
 
-    const [show, setShow] = useState(false);
+export default function CentralComponent() {
+  return (
+    <div>
+      <section id="chi-siamo" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><ChiSiamo /></FadeInWrapper>
+      </section>
 
-    const handleClose = () => {
-        setShow(false)
-    };
+      <section id="informazioni" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><InformazioniGenerali /></FadeInWrapper>
+      </section>
 
-    const handleShow = () => {
-        console.log("handleShow")
-        setShow(true)
-    };
+      <section id="chiesa" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><LaChiesa /></FadeInWrapper>
+      </section>
 
-    return (
+      <section id="ricevimento" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><IlRicevimento /></FadeInWrapper>
+      </section>
 
-        <div>
-            <Navbar show={show} handleShow={handleShow} handleClose={handleClose} />
-            <Siderbar show={show} handleShow={handleShow} handleClose={handleClose} />
-            <div>
-                <ChiSiamo />
-                <InformazioniGenerali />
-                <LaChiesa />
-                <IlRicevimento />
-                <Partecipazione />
-                <Regali />
-            </div>
-        </div>
-    )
+      <section id="partecipazione" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><Partecipazione /></FadeInWrapper>
+      </section>
+
+      <section id="regali" style={{ paddingTop: 80, paddingBottom: 60 }}>
+        <FadeInWrapper><Regali /></FadeInWrapper>
+      </section>
+    </div>
+  );
 }

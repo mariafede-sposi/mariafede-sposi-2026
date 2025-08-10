@@ -1,32 +1,32 @@
-import React, { useState } from 'react'
+import React from 'react';
 
-// src/main.jsx
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Questa linea è cruciale
-// ... il resto del tuo codice ...
-
-export const Navbar = ({ show, handleShow, handleClose }) => {
-
-    const handleSidebar = () => {
-        if (show)
-            handleClose()
-        else
-            handleShow()
-    }
-
-    return (
-        <nav class="navbar navbar-expand-lg main-navbar">
-            <div class="container-fluid">
-                <div class="pointer" onClick={() => handleSidebar()}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-                    </svg>
-                </div>
-                <div class="flower-img">
-
-                </div>
-
-            </div>
-        </nav>
-    )
+export default function Navbar({ onMenuClick }) {
+  return (
+    <nav
+      className="navbar bg-light border-bottom"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 56,
+        zIndex: 1100,
+        paddingLeft: 10,
+        paddingRight: 10,
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <button
+        className="btn btn-primary"
+        onClick={onMenuClick}
+        aria-label="Apri menu"
+      >
+        ☰
+      </button>
+      <span className="navbar-brand ms-3 mb-0 h1" style={{ userSelect: 'none' }}>
+        Matrimonio
+      </span>
+    </nav>
+  );
 }

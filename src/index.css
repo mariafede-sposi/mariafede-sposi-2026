@@ -1,82 +1,88 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --bianco-avorio: #F9F6F2;
+  --oro-chiaro: #E6D3A3;
+  --rosa-cipria: #E9CFCF;
+  --beige-caldo: #D9CFC1;
+  --grigio-perla: #BFC4C9;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.nav-link {
-  color: #574240 !important;
+  --colore-primario: var(--oro-chiaro);
+  --colore-secondario: var(--rosa-cipria);
+  --colore-sfondo: var(--bianco-avorio);
+  --colore-testo: #5A4A42; /* marrone scuro tendente al caldo */
+  --colore-bordo: var(--beige-caldo);
 }
 
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: #fafafa !important;
+  background-color: var(--colore-sfondo);
+  color: var(--colore-testo);
+  font-family: "Georgia", serif;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+a.nav-link {
+  color: var(--oro-chiaro);
+  font-weight: 600;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+a.nav-link:hover {
+  color: var(--rosa-cipria);
+  text-decoration: underline;
+}
+
+button.btn-primary {
+  background-color: var(--oro-chiaro);
+  border-color: var(--oro-chiaro);
+  color: var(--bianco-avorio);
+  font-weight: 600;
+}
+
+button.btn-primary:hover {
+  background-color: var(--rosa-cipria);
+  border-color: var(--rosa-cipria);
+  color: var(--bianco-avorio);
+}
+
+/* Bordo e sfondi chiari */
+.card, nav.sidebar {
+  background-color: var(--beige-caldo);
+  border: 1px solid var(--colore-bordo);
+}
+
+
+.sidebar {
+  background-color: var(--champagne);
+  height: 100vh;
+  border-right: 1px solid var(--grigio-tortora);
+  overflow-y: auto;
+}
+
+.sidebar .nav-link {
+  color: var(--rosa-corallo);
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
 }
 
-button:hover {
-  border-color: #646cff;
+.sidebar .nav-link:hover {
+  color: var(--verde-salvia);
+  text-decoration: underline;
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.btn-custom {
+  background-color: var(--rosa-corallo);
+  color: white;
+  border-radius: 6px;
+  border: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
+.btn-custom:hover {
+  background-color: var(--verde-salvia);
+  color: white;
 }
+
 
 
 /* CUSTOM */

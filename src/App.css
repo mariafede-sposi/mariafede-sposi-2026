@@ -102,3 +102,14 @@
   overflow-y: auto;
   text-align: left;
 }
+
+.fade-in {
+  opacity: 0;
+  animation: fadeInAnimation 1s forwards;
+}
+
+@keyframes fadeInAnimation {
+  to {
+    opacity: 1;
+  }
+}
