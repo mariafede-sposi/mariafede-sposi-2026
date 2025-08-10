@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
 import nodemailer from 'nodemailer';
 import pkg from 'pg';
 const { Pool } = pkg;
@@ -42,8 +42,8 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail', // Puoi cambiare provider
       auth: {
-        user: import.meta.env.VITE_EMAIL_FROM,
-        pass: import.meta.env.VITE_EMAIL_PASS,
+        user: process.env.EMAIL_FROM,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -58,7 +58,7 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_TO, // dove ricevi la conferma
+      to: email, // dove ricevi la conferma
       subject: 'Nuova conferma di partecipazione',
       text: corpo_mail,
     });

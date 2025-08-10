@@ -24,13 +24,13 @@ export default function Partecipazione() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://${import.meta.env.VITE_LOCAL_URL}/salvataggioADBedInvioEmail`, {
+      const res = await fetch(`${import.meta.env.VITE_BE_URL}/salvataggioADBedInvioEmail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          destinatario_mail: formData.email,
+          email: formData.email,
           corpo_mail: `
 			  Partecipanti: ${formData.partecipanti}
 			  Bambini: ${formData.bambini}
