@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { Button, Offcanvas, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function ChiSiamo ({ show, handleShow, handleClose }) {
+export default function ChiSiamo({ show, handleShow, handleClose }) {
 
     return (
         <div className="container-fluid">
             <div className="row">
                 <div className="col-12 col-md-6">
-
                     <div className="image-container d-block mx-auto chi-siamo-img" ></div>
-
                 </div>
                 <div className="col-12 col-md-6 chi-siamo-text">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lorem magna, consequat a dolor a, facilisis convallis libero. Quisque faucibus, nunc nec dignissim bibendum, purus lorem accumsan quam, fringilla hendrerit nisi est ut tortor. Pellentesque maximus est sit amet sem iaculis posuere. Aliquam consequat vehicula porta. Phasellus ipsum nibh, cursus ac vehicula nec, interdum sit amet magna. Etiam eget sodales massa, nec lacinia ligula. Aliquam erat volutpat. Sed auctor est eget commodo consequat. Mauris lacus magna, aliquam non odio eget, rutrum vehicula magna. Suspendisse ut dolor vitae odio efficitur pellentesque quis eget est. Duis id orci et justo hendrerit posuere a ut lectus. Vestibulum mollis blandit lorem at sagittis. Mauris rutrum blandit mi, vitae euismod sapien egestas a.

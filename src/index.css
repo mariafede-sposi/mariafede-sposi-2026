@@ -9,6 +9,7 @@
   --colore-secondario: var(--rosa-cipria);
   --colore-sfondo: var(--bianco-avorio);
   --colore-testo: #5A4A42;
+  --colore-testo-hover: #9b7f71;
   /* marrone scuro tendente al caldo */
   --colore-bordo: var(--beige-caldo);
 }
@@ -25,19 +26,26 @@ body {
 }
 
 a.nav-link {
-  color: var(--oro-chiaro);
+  color: var(--colore-testo);
   font-weight: 600;
 }
 
 a.nav-link:hover {
-  color: var(--rosa-cipria);
+  color: var(--colore-testo-hover);
   text-decoration: underline;
 }
 
 button.btn-primary {
-  background-color: var(--oro-chiaro);
-  border-color: var(--oro-chiaro);
-  color: var(--bianco-avorio);
+  background-color: var(--rosa-cipria);
+  border-color: var(--rosa-cipria);
+  color: var(--colore-testo);
+  font-weight: 600;
+}
+
+.navbar-button {
+  background-color: #f1e8e7 !important;
+  border: 0 !important;
+  color: var(--colore-testo);
   font-weight: 600;
 }
 
@@ -46,6 +54,11 @@ button.btn-primary:hover {
   border-color: var(--rosa-cipria);
   color: var(--bianco-avorio);
 }
+
+.navbar-button:hover {
+  color: var(--colore-testo-hover) !important;
+}
+
 
 /* Bordo e sfondi chiari */
 .card,
@@ -81,7 +94,7 @@ nav.sidebar {
 }
 
 .btn-custom:hover {
-  background-color: #9b7f71;
+  background-color: var(--colore-testo-hover);
   color: white;
 }
 

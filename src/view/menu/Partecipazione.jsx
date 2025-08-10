@@ -21,37 +21,37 @@ export default function Partecipazione() {
     }
   };
 
-	const handleSubmit = async (e) => {
-	  e.preventDefault();
-	  try {
-		const res = await fetch('https://tuo-backend.onrender.com/salvataggioADBedInvioEmail', {
-		  method: 'POST',
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		  body: JSON.stringify({
-			destinatario_mail: formData.email,
-			corpo_mail: `
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`https://${import.meta.env.VITE_LOCAL_URL}/salvataggioADBedInvioEmail`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destinatario_mail: formData.email,
+          corpo_mail: `
 			  Partecipanti: ${formData.partecipanti}
 			  Bambini: ${formData.bambini}
 			  Allergie: ${formData.allergie}
 			  Preferenze: ${formData.preferenze}
 			`,
-			partecipanti: formData.partecipanti,
-			bambini: formData.bambini,
-			allergie: formData.allergie,
-			preferenze: formData.preferenze
-		  }),
-		});
+          partecipanti: formData.partecipanti,
+          bambini: formData.bambini,
+          allergie: formData.allergie,
+          preferenze: formData.preferenze
+        }),
+      });
 
-		if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) throw new Error(await res.text());
 
-		setSubmitted(true);
-	  } catch (err) {
-		console.error(err);
-		alert('Errore durante l’invio, riprova più tardi.');
-	  }
-	};
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert('Errore durante l’invio, riprova più tardi.');
+    }
+  };
 
 
 

@@ -15,17 +15,18 @@ export default function Navbar({ onMenuClick }) {
         paddingRight: 10,
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'left'
       }}
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-primary navbar-button"
         onClick={onMenuClick}
         aria-label="Apri menu"
       >
         ☰
       </button>
-      <span className="navbar-brand ms-3 mb-0 h1" style={{ userSelect: 'none' }}>
-        Matrimonio
+      <span className="navbar-brand ms-3 mb-0" style={{ userSelect: 'none' }}>
+        Matrimonio di Maria Teresa & Federico
       </span>
     </nav>
   );

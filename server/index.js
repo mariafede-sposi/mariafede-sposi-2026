@@ -42,8 +42,8 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail', // Puoi cambiare provider
       auth: {
-        user: process.env.EMAIL_FROM,
-        pass: process.env.EMAIL_PASS,
+        user: import.meta.env.VITE_EMAIL_FROM,
+        pass: import.meta.env.VITE_EMAIL_PASS,
       },
     });
 
