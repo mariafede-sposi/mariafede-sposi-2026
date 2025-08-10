@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 export default function Partecipazione() {
   const [formData, setFormData] = useState({
     partecipanti: 1,
+    bambini: 0,
+    email: '',
     allergie: '',
     preferenze: '',
   });
@@ -39,6 +41,22 @@ export default function Partecipazione() {
     <>
       <h2>Partecipazione</h2>
       <form onSubmit={handleSubmit} className="d-flex flex-column" style={{ maxWidth: 400, gap: '1rem' }}>
+
+
+
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="esempio@tuaemail.it"
+            className="form-control"
+          />
+        </label>
+
+
         <label>
           Numero di partecipanti:
           <input
@@ -46,6 +64,18 @@ export default function Partecipazione() {
             name="partecipanti"
             min="1"
             value={formData.partecipanti}
+            onChange={handleChange}
+            required
+            className="form-control"
+          />
+        </label>
+        <label>
+          Numero di bambini (0-12 anni):
+          <input
+            type="number"
+            name="bambini"
+            min="0"
+            value={formData.bambini}
             onChange={handleChange}
             required
             className="form-control"

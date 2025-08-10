@@ -8,7 +8,8 @@
   --colore-primario: var(--oro-chiaro);
   --colore-secondario: var(--rosa-cipria);
   --colore-sfondo: var(--bianco-avorio);
-  --colore-testo: #5A4A42; /* marrone scuro tendente al caldo */
+  --colore-testo: #5A4A42;
+  /* marrone scuro tendente al caldo */
   --colore-bordo: var(--beige-caldo);
 }
 
@@ -47,7 +48,8 @@ button.btn-primary:hover {
 }
 
 /* Bordo e sfondi chiari */
-.card, nav.sidebar {
+.card,
+nav.sidebar {
   background-color: var(--beige-caldo);
   border: 1px solid var(--colore-bordo);
 }
@@ -72,14 +74,14 @@ button.btn-primary:hover {
 
 
 .btn-custom {
-  background-color: var(--rosa-corallo);
+  background-color: var(--colore-testo);
   color: white;
   border-radius: 6px;
   border: none;
 }
 
 .btn-custom:hover {
-  background-color: var(--verde-salvia);
+  background-color: #9b7f71;
   color: white;
 }
 
