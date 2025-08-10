@@ -9,51 +9,64 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connessione al database PostgreSQL (Render ti darà questi dati)
+// Connessione al database PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // importante per Render
+  ssl: { rejectUnauthorized: false }
 });
 
-app.post('/send-email', async (req, res) => {
-  const { message } = req.body;
+// Endpoint per salvataggio a DB e invio email
+app.post('/salvataggioADBedInvioEmail', async (req, res) => {
+  const { email, partecipanti, bambini, allergie, preferenze } = req.body;
 
-// Controllo la presenza del campo destinatario_mail
-if (!destinatario_mail || !corpo_mail) {
-  return res.status(400).send('Destinatario o campi necessari, mancanti');
-}
-// validazione email
-if (!destinatario_mail.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) {
+  // 1. Validazioni
+  if (!email || !partecipanti) {
+    return res.status(400).send('Email e numero partecipanti sono obbligatori');
+  }
+  if (!email.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) {
     return res.status(400).send('Email non valida');
-}
-  
-  // 1. Invia mail
+  }
+  if (partecipanti < 1) {
+    return res.status(400).send('Il numero di partecipanti deve essere almeno 1');
+  }
+
   try {
+    // 2. Salva nel DB
+    await pool.query(
+      `INSERT INTO partecipazioni (email, partecipanti, bambini, allergie, preferenze)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [email, partecipanti, bambini || 0, allergie || '', preferenze || '']
+    );
+
+    // 3. Invia l'email
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // o altro provider
+      service: 'gmail', // Puoi cambiare provider
       auth: {
         user: process.env.EMAIL_FROM,
         pass: process.env.EMAIL_PASS,
       },
     });
 
+    const corpo_mail = `
+      Nuova conferma di partecipazione:
+      - Email: ${email}
+      - Partecipanti: ${partecipanti}
+      - Bambini: ${bambini || 0}
+      - Allergie: ${allergie || 'Nessuna'}
+      - Preferenze alimentari: ${preferenze || 'Nessuna'}
+    `;
+
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
-      to: destinatario_mail,
-      subject: 'Messaggio dal sito matrimonio',
+      to: process.env.EMAIL_TO, // dove ricevi la conferma
+      subject: 'Nuova conferma di partecipazione',
       text: corpo_mail,
     });
 
-    // 2. Salva nel DB
-    await pool.query(
-      'INSERT INTO messaggi (destinatario, contenuto, data_invio) VALUES ($1, $2, NOW())',
-      [destinatario_mail, corpo_mail]
-    );
-
-    res.status(200).send('Email inviata e messaggio salvato');
+    res.status(200).send('Partecipazione registrata e email inviata');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Errore durante invio/salvataggio');
+    res.status(500).send('Errore durante il salvataggio o invio email');
   }
 });
 

@@ -21,12 +21,39 @@ export default function Partecipazione() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Dati inviati:', formData);
-    setSubmitted(true);
-    // Qui potresti integrare API o invio email
-  };
+	const handleSubmit = async (e) => {
+	  e.preventDefault();
+	  try {
+		const res = await fetch('https://tuo-backend.onrender.com/salvataggioADBedInvioEmail', {
+		  method: 'POST',
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify({
+			destinatario_mail: formData.email,
+			corpo_mail: `
+			  Partecipanti: ${formData.partecipanti}
+			  Bambini: ${formData.bambini}
+			  Allergie: ${formData.allergie}
+			  Preferenze: ${formData.preferenze}
+			`,
+			partecipanti: formData.partecipanti,
+			bambini: formData.bambini,
+			allergie: formData.allergie,
+			preferenze: formData.preferenze
+		  }),
+		});
+
+		if (!res.ok) throw new Error(await res.text());
+
+		setSubmitted(true);
+	  } catch (err) {
+		console.error(err);
+		alert('Errore durante l’invio, riprova più tardi.');
+	  }
+	};
+
+
 
   if (submitted) {
     return (
