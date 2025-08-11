@@ -7,33 +7,32 @@ import IlRicevimento from './menu/IlRicevimento';
 import Partecipazione from './menu/Partecipazione';
 import Regali from './menu/Regali';
 import FadeInWrapper from './FadeInWrapper';
+import Countdown from './Countdown';
 
 export default function CentralComponent() {
   return (
-    <div>
-      <section id="chi-siamo" style={{ paddingTop: 0, paddingBottom: 20 }}>
-        <FadeInWrapper><ChiSiamo /></FadeInWrapper>
-      </section>
 
-      <section id="informazioni" style={{ paddingTop: 10, paddingBottom: 10 }}>
+    <div>
+      <section id="informazioni" className='box-container' >
         <FadeInWrapper><InformazioniGenerali /></FadeInWrapper>
       </section>
 
-      <section id="chiesa" style={{ paddingTop: 10, paddingBottom: 10 }}>
+      <section id="chi-siamo" className='box-container' >
+        <FadeInWrapper><ChiSiamo /></FadeInWrapper>
+      </section>
+
+      <section id="chiesa" className='box-container' >
         <FadeInWrapper><LaChiesa /></FadeInWrapper>
       </section>
-      <div style={{ display: 'grid', justifyItems: 'center' }}>
-        <div className='fogliolina-img'></div>
-      </div>
-      <section id="ricevimento" style={{ paddingTop: 10, paddingBottom: 10 }}>
+      <section className='box-container' id="ricevimento" >
         <FadeInWrapper><IlRicevimento /></FadeInWrapper>
       </section>
 
-      <section id="partecipazione" style={{ paddingTop: 10, paddingBottom: 10 }}>
+      <section className='box-container' id="partecipazione"  >
         <FadeInWrapper><Partecipazione /></FadeInWrapper>
       </section>
 
-      <section id="regali" style={{ paddingTop: 10, paddingBottom: 10 }}>
+      <section className='box-container' id="regali" >
         <FadeInWrapper><Regali /></FadeInWrapper>
       </section>
     </div>

@@ -6,9 +6,23 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <>
+    < div style={{ paddingBottom: 50 }}>
       <Navbar onMenuClick={() => setSidebarOpen(true)} />
+      <div className='header'>
 
+        <div>
+          <h1 style={{ marginBottom: -5 }}>
+            Maria Teresa & Federico<br />
+          </h1>
+          <h3>
+            <i>
+              vi invitano al loro matrimonio
+            </i>
+          </h3>
+          <h1 style={{ marginBottom: -5 }}>14 Febbraio 2026</h1>
+          <h2>ore 11:00</h2>
+        </div>
+      </div>
       {sidebarOpen && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100"
@@ -50,18 +64,8 @@ export default function App() {
         </ul>
       </nav>
 
-      <main
 
-        style={{
-          backgroundColor: 'var(--bianco-avorio)',
-          minHeight: '100vh',
-          fontFamily: "'Georgia', serif",
-          color: 'var(--colore-testo)',
-          margin: 0,
-        }}
-      >
-        <CentralComponent />
-      </main>
-    </>
+      <CentralComponent />
+    </div>
   );
 }

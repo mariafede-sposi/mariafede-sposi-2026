@@ -1,6 +1,12 @@
-export default function InformazioniGenerali ({ show, handleShow, handleClose }){
+import Countdown from "../Countdown";
+import './../Countdown.css';
+
+export default function InformazioniGenerali({ show, handleShow, handleClose }) {
 
     return (
-        <div>informazioni generali</div>
+        <div style={{ marginBottom: 10 }}>
+
+            <Countdown />
+        </div>
     )
 }

@@ -3,7 +3,7 @@ import React from 'react';
 export default function Navbar({ onMenuClick }) {
   return (
     <nav
-      className="navbar bg-light border-bottom"
+      className="navbar bg-lights"
       style={{
         position: 'fixed',
         top: 0,
@@ -29,14 +29,26 @@ export default function Navbar({ onMenuClick }) {
 
       <span
         style={{
-          fontSize: '1rem',
+          fontSize: '2rem',
           fontWeight: 500,
           whiteSpace: 'normal', // Permette al testo di spezzarsi
           wordBreak: 'break-word', // Evita overflow
-          flex: 1 // Prende lo spazio rimanente
+          flex: 1, // Prende lo spazio rimanente
+          marginLeft: 50
         }}
       >
-        Matrimonio di Maria Teresa & Federico 💒​​💍
+        M&F
+      </span>
+      <span
+        style={{
+          fontSize: '1rem',
+          fontWeight: 500,
+          whiteSpace: 'normal', // Permette al testo di spezzarsi
+          wordBreak: 'break-word', // Evita overflow 
+          marginRight: 10
+        }}
+      >
+        14/02/2026
       </span>
     </nav>
   );

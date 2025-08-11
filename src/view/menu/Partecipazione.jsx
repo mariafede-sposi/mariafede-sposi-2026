@@ -63,7 +63,7 @@ export default function Partecipazione() {
   }
 
   return (
-    <>
+    <div className="container my-5">
       <h2>Partecipazione</h2>
       <div className="row align-items-center">
 
@@ -151,6 +151,6 @@ export default function Partecipazione() {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

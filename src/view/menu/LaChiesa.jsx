@@ -1,14 +1,14 @@
 export default function LaChiesa({ show, handleShow, handleClose }) {
 
     return (
-        <div className="container my-5">
+        <div >
             <div className="row align-items-center">
 
 
                 {/* Descrizione */}
+                <h3>Collegiata di Santa Maria Assunta </h3>
+                <h3 style={{ marginTop: '-10px' }}> Ariccia (RM)</h3>
                 <div className="col-12 col-md-6">
-                    <h3>Collegiata di Santa Maria Assunta </h3>
-                    <h3 style={{ marginTop: '-10px' }}> Ariccia (RM)</h3>
                     <p>
                         📍{" "}
                         <a

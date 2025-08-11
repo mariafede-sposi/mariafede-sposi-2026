@@ -1,9 +1,30 @@
 :root {
-  --bianco-avorio: #F9F6F2;
-  --oro-chiaro: #E6D3A3;
-  --rosa-cipria: #E9CFCF;
-  --beige-caldo: #D9CFC1;
-  --grigio-perla: #BFC4C9;
+
+  /* Palette colori principali */
+  --seashell: #F9F0EB;
+  /* Colore chiaro, sfondo o aree ampie */
+  --pale-dogwood: #ffe3d7;
+  /* Rosa cipria delicato, perfetto per accenti */
+  --burnt-sienna: #D47058;
+  /* Rosso bruciato, ottimo per elementi importanti */
+  --buff: #D99A71;
+  /* Beige caldo, ottimo per bordi o testi secondari */
+  --platinum: #D7E0DD;
+  /* Grigio verdastro molto chiaro, elegante sfondo */
+  --ash-gray: #9E9F91;
+  /* Grigio tenue, ottimo per testi o bordi */
+
+  /* Colori testo */
+  --text-primary: var(--burnt-sienna);
+  --text-secondary: var(--ash-gray);
+
+  /* Background */
+  --background-main: var(--seashell);
+  --background-accent: var(--platinum);
+
+  /* Accent & Hover */
+  --accent-color: var(--pale-dogwood);
+  --accent-hover: var(--buff);
 
   --colore-primario: var(--oro-chiaro);
   --colore-secondario: var(--rosa-cipria);
@@ -20,9 +41,10 @@ html {
 }
 
 body {
-  background-color: var(--colore-sfondo);
+  background: linear-gradient(to bottom, var(--seashell), var(--pale-dogwood));
+
   color: var(--colore-testo);
-  font-family: "Georgia", serif;
+  font-family: 'Fraunces';
 }
 
 a.nav-link {
@@ -43,7 +65,7 @@ button.btn-primary {
 }
 
 .navbar-button {
-  background-color: #f1e8e7 !important;
+  background-color: transparent !important;
   border: 0 !important;
   color: var(--colore-testo);
   font-weight: 600;
@@ -137,4 +159,21 @@ h3 {
   /* Potresti anche giocare con font-variation-settings per Fraunces
      se usi la versione variabile, es: font-variation-settings: 'opsz' 100, 'wght' 700;
   */
+}
+
+.full-width-section {
+  width: 100vw;
+  /* prende tutta la viewport */
+  margin-left: calc(-50vw + 50%);
+  /* resetta i margini di un container */
+  background-color: #9b7f71;
+}
+
+.header,
+.box-container {
+  background-color: #fffcf8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px 40px;
+  border-radius: 20px;
+  margin-bottom: 15px;
 }
