@@ -9,13 +9,14 @@ export default function Navbar({ onMenuClick }) {
         top: 0,
         left: 0,
         right: 0,
-        height: 56,
+        height: 'auto',
+        minHeight: 56,
         zIndex: 1100,
-        paddingLeft: 10,
-        paddingRight: 10,
+        padding: '0 10px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'left'
+        flexWrap: 'wrap', // Permette di andare a capo su schermi piccoli
+        gap: '0.5rem'
       }}
     >
       <button
@@ -25,8 +26,17 @@ export default function Navbar({ onMenuClick }) {
       >
         ☰
       </button>
-      <span className="navbar-brand ms-3 mb-0" style={{ userSelect: 'none' }}>
-        Matrimonio di Maria Teresa & Federico
+
+      <span
+        style={{
+          fontSize: '1rem',
+          fontWeight: 500,
+          whiteSpace: 'normal', // Permette al testo di spezzarsi
+          wordBreak: 'break-word', // Evita overflow
+          flex: 1 // Prende lo spazio rimanente
+        }}
+      >
+        Matrimonio di Maria Teresa & Federico 💒​​💍
       </span>
     </nav>
   );

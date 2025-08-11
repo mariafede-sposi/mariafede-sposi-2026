@@ -51,9 +51,8 @@ export default function App() {
       </nav>
 
       <main
-        className="p-4"
+
         style={{
-          paddingTop: 56 + 20,
           backgroundColor: 'var(--bianco-avorio)',
           minHeight: '100vh',
           fontFamily: "'Georgia', serif",
