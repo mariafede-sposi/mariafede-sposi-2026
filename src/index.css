@@ -41,7 +41,7 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, var(--seashell), var(--pale-dogwood));
+  background: linear-gradient(to bottom, var(--seashell), #fff3d7);
 
   color: var(--colore-testo);
   font-family: 'Fraunces';
