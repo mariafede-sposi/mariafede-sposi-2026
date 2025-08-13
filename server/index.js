@@ -6,10 +6,17 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 const app = express();
-app.use((req, res, next) => {
-  const allowedOrigin = 'https://mariafede-sposi.github.io/';
-  const requestOrigin = req.get('origin');
+// Configura CORS per accettare SOLO il tuo sito GitHub Pages
+app.use(cors({
+  origin: 'https://mariafede-sposi.github.io', // senza slash finale
+  methods: ['GET', 'POST'],
+  credentials: false
+}));
 
+// Controllo extra: blocca richieste da origini non autorizzate
+app.use((req, res, next) => {
+  const allowedOrigin = 'https://mariafede-sposi.github.io';
+  const requestOrigin = req.get('origin');
   if (requestOrigin !== allowedOrigin) {
     return res.status(403).send('Accesso non autorizzato');
   }
