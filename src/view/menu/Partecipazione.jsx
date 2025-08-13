@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,6 +15,8 @@ export default function Partecipazione() {
   const [submitted, setSubmitted] = useState(false);
   const [response, setResponse] = useState(null);
 
+  const graziePerLaConferma = useRef(null);
+
   const menuOptions = [
     "Nessuna",
     "Vegetariano",
@@ -26,16 +28,23 @@ export default function Partecipazione() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "partecipanti") {
-      const num = Math.max(1, Number(value));
-      setFormData((prev) => ({ ...prev, partecipanti: num }));
-    } else if (name === "bambini") {
-      const num = Math.max(0, Number(value));
-      setFormData((prev) => ({ ...prev, bambini: num }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData((prev) => {
+      if (name === "partecipanti") {
+        return {
+          ...prev,
+          partecipanti: value === "" ? "" : Math.max(1, Number(value)),
+        };
+      }
+      if (name === "bambini") {
+        return {
+          ...prev,
+          bambini: value === "" ? "" : Math.max(0, Number(value)),
+        };
+      }
+      return { ...prev, [name]: value };
+    });
   };
+
 
   const handlePersonChange = (index, field, value) => {
     const updatedPersone = [...formData.persone];
@@ -47,7 +56,10 @@ export default function Partecipazione() {
   };
 
   useEffect(() => {
-    const totale = Number(formData.partecipanti) + Number(formData.bambini);
+    const partecipantiNum = Number(formData.partecipanti) || 0;
+    const bambiniNum = Number(formData.bambini) || 0;
+    const totale = partecipantiNum + bambiniNum;
+
     setFormData((prev) => {
       let newPersone = [...prev.persone];
 
@@ -103,9 +115,8 @@ export default function Partecipazione() {
         }),
       });
 
-      if (!res.ok) throw new Error(await res.text());
-
       setSubmitted(true);
+      scrollToTarget()
       toast.success("Hai compilato tutto il form! Che top!!")
     } catch (err) {
       console.error(err);
@@ -113,16 +124,24 @@ export default function Partecipazione() {
     }
   };
 
+  const scrollToTarget = () => {
+    if (graziePerLaConferma.current) {
+      graziePerLaConferma.current.scrollIntoView({
+        behavior: "smooth", // animazione fluida
+        block: "start"      // posizione verticale (start, center, end)
+      });
+    }
+  };
 
   if (submitted) {
     return (
-      <div>
-        <h2>Grazie per la conferma!</h2>
+      <div ref={graziePerLaConferma}>
+        <h2>Grazie per la conferma! 🥰​🎉​🎉​</h2>
         <p>Abbiamo ricevuto la tua risposta.</p>
         <p>
           Se tutto è andato a buon fine, riceverai una mail riepilogativa entro qualche minuto!
         </p>
-        <p>Non vediamo l'ora di stare insieme, ti voglio bene campione!</p>
+        <p>Non vediamo l'ora di stare insieme, ti vogliamo bene campione!</p>
       </div>
     );
   }
@@ -146,7 +165,7 @@ export default function Partecipazione() {
   if (response === "no") {
     return (
       <div className="container my-5">
-        <h3>Non potrai partecipare?</h3>
+        <h3>Non potrai partecipare? 😢🥹​</h3>
         <p>
           Ci dispiace non poterti avere con noi in questo giorno speciale, ma ti
           saremo vicini con il pensiero.
@@ -155,11 +174,12 @@ export default function Partecipazione() {
           <br />
           <br />
           Ci trovi ai numeri:
-          <br /> <br />
-          <strong>Maria Teresa</strong> +39 339 775 67 35
-          <br />
-          <strong>Federico</strong> +39 373 743 11 23
         </p>
+        <br /> <br />
+        <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
+        <p style={{ fontSize: '1.3em' }}> <strong>Federico</strong> +39 373 743 11 23</p>
+
+        <br />
         <div className="d-flex justify-content-center mt-3">
           <button className="btn btn-secondary" onClick={() => setResponse(null)}>
             Ho cambiato idea
@@ -206,6 +226,7 @@ export default function Partecipazione() {
                 className="form-control"
                 required
               />
+
             </div>
             <div className="col-md-6">
               <label htmlFor="bambini" className="fw-semibold mb-2">
@@ -330,10 +351,10 @@ export default function Partecipazione() {
             <br />
             Ci trovi ai numeri:
             <br />
-            <strong>Maria Teresa</strong> +39 339 775 67 35
-            <br />
-            <strong>Federico</strong> +39 373 743 11 23
+            <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
+            <p style={{ fontSize: '1.3em' }}> <strong>Federico</strong> +39 373 743 11 23</p>
           </p>
+          <br />
           <div className="d-flex justify-content-center mt-3">
             <button className="btn btn-secondary" onClick={() => setResponse(null)}>
               Ho cambiato idea

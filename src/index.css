@@ -41,8 +41,9 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, var(--seashell), #fff3d7);
-
+  background-image: url(./imgs/background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
   color: var(--colore-testo);
   font-family: 'Fraunces';
 }
@@ -169,11 +170,19 @@ h3 {
   background-color: #9b7f71;
 }
 
-.header,
+.header {
+
+  padding: 20px 0;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  color: #fffcf8;
+  text-shadow: 2px 2px 4px rgb(69 26 26 / 50%);
+}
+
 .box-container {
   background-color: #fffcf8;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px 40px;
+  padding: 20px;
   border-radius: 20px;
   margin-bottom: 15px;
 }

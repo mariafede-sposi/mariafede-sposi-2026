@@ -78,3 +78,9 @@
     background-size: contain;
     align-content: center;
 }
+
+@media (max-width: 600px) {
+    .countdown-timer {
+        font-size: 0rem;
+    }
+}

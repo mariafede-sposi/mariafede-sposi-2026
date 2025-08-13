@@ -1,6 +1,8 @@
 export default function IlRicevimento({ show, handleShow, handleClose }) {
     return (
-        <div className="container my-5">
+        <div>
+
+            <h2>Villa Pocci, Marino (RM)</h2>
             <div className="row align-items-center">
                 {/* Mappa */}
                 <div className="col-12 col-md-6 mb-3 mb-md-0">
@@ -18,7 +20,6 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
 
                 {/* Descrizione */}
                 <div className="col-12 col-md-6">
-                    <h3>Villa Pocci, Marino (RM)</h3>
                     <p>
                         📍{" "}
                         <a
@@ -30,12 +31,8 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
                         </a>
                     </p>
                     <p>Occhio che ci sono <strong>tre</strong> cancelli di entrata, quello giusto è <strong>quello centrale</strong>! Se avete problemi di deambulazione fatecelo sapere e ci mettiamo d'accordo con il ristorante per farvi entrare da un punto dove non siete obbligati a fare scale.</p>
-                    <p className="text-start">
-                        Dal sito web della villa:  <i>  "La Villa è immersa nel verde di un enorme parco, impreziosito da piante secolari e da generose fioriture. Un incantevole giardino d’inverno dotato di vetrate panoramiche e un cielo stellato, si affaccia sulla terrazza con veduta sul lago, spazi luminosi, ampi e confortevoli il cui gusto e sobrietà negli arredi permettono una facile personalizzazione della scenografia di qualsiasi evento.
-                            All’esterno, le due bellissime piscine a ridosso della struttura e la magnifica terrazza sono lo spazio ideale per cocktail e aperitivi. Con il bel tempo il banchetto o il buffet può essere allestito interamente sulla terrazza e godere della meravigliosa vista sul lago di Castel Gandolfo."
-                        </i>
 
-                    </p>
+
                 </div>
             </div>
         </div>
