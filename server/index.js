@@ -6,7 +6,15 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 const app = express();
-app.use(cors());
+app.use((req, res, next) => {
+  const allowedOrigin = 'https://mariafede-sposi.github.io/';
+  const requestOrigin = req.get('origin');
+
+  if (requestOrigin !== allowedOrigin) {
+    return res.status(403).send('Accesso non autorizzato');
+  }
+  next();
+});
 app.use(express.json());
 
 // Connessione al database PostgreSQL
