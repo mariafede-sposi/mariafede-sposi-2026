@@ -67,8 +67,9 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
       - Email: ${email}
       - Adulti: ${partecipanti}
       - Bambini: ${bambini || 0}
-	  - Partecipanti:
-	  ${persone.map(p=>`-- ${p.nome} - ${p.preferenza} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
+      - Partecipanti:
+      ${persone.map(p => `-- ${p.nome} - ${(p.preferenza?.toLowerCase().includes('specificare quali') ? 'Allergie riportate di seguito' : p.preferenza)} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
+	  - Note: ${note}
     `;
 
     await transporter.sendMail({
