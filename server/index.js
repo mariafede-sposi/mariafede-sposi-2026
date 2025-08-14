@@ -33,12 +33,13 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini }) {
   await pool.query(
     `INSERT INTO partecipazioni (email, partecipanti, bambini)
      VALUES ($1, $2, $3)`,
-    [email || '', partecipanti, bambini || 0]
+    [email || null, partecipanti, bambini || 0] // usa null se email è vuoto
   );
 }
 
 // Funzione per inviare l'email
 async function inviaEmail({ email, partecipanti, bambini, persone, note }) {
+  if (!email) return; // non inviare email se campo vuoto
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -91,10 +92,11 @@ async function inviaMailErrore(logErrore) {
 app.post('/salvataggioADBedInvioEmail', (req, res) => {
   const { email, partecipanti, bambini, persone, note } = req.body;
 
-  if (!email || !partecipanti) return res.status(400).send('Email e numero partecipanti sono obbligatori');
-  if (!email.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) return res.status(400).send('Email non valida');
-  if (partecipanti < 1) return res.status(400).send('Il numero di partecipanti deve essere almeno 1');
 
+  if (!partecipanti) return res.status(400).send('Numero partecipanti è obbligatorio');
+  if (partecipanti < 1) return res.status(400).send('Il numero di partecipanti deve essere almeno 1');
+  if (email && !email.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) return res.status(400).send('Email non valida');
+  
   res.status(200).send('Richiesta ricevuta, elaborazione in corso');
 
   (async () => {
