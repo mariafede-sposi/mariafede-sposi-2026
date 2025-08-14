@@ -48,9 +48,14 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
   try {
     // 2. Salva nel DB
     await pool.query(
-      `INSERT INTO partecipazioni (email, partecipanti, bambini, allergie, preferenze)
+      `INSERT INTO partecipazioni (email, partecipanti, bambini, persone, note)
        VALUES ($1, $2, $3, $4, $5)`,
-      [email, partecipanti, bambini || 0, allergie || '', preferenze || '']
+      [email || '', partecipanti, bambini || 0, persone, note || 'Nessuna nota indicata', persone]
+	            email: formData.email,
+          partecipanti: formData.partecipanti,
+          bambini: formData.bambini,
+          persone: formData.persone,
+          note: formData.note
     );
 
     // 3. Invia l'email
@@ -62,13 +67,29 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
       },
     });
 
+	email:"fede.crem@hotmail.it"
+	note:"Nota speciale"
+	partecipanti:1
+	bambini:1
+	persone:
+		0:
+		    adulto:1
+			allergie:"Allergia specifica ADULTO"
+			nome:"patrizia d'imporzano"
+			preferenza:"Allergie alimentari (specificare quali)"
+		1:
+			adulto:0
+			allergie:"Allergia BAMBINO"
+			nome:"Nome bambino"
+			preferenza:"Allergie alimentari (specificare quali)"
+
     const corpo_mail = `
       Nuova conferma di partecipazione:
       - Email: ${email}
-      - Partecipanti: ${partecipanti}
+      - Adulti: ${partecipanti}
       - Bambini: ${bambini || 0}
-      - Allergie: ${allergie || 'Nessuna'}
-      - Preferenze alimentari: ${preferenze || 'Nessuna'}
+	  - Partecipanti:
+	  ${persone.map(p=>`-- ${p.nome} - ${p.preferenza} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
     `;
 
     await transporter.sendMail({

@@ -101,13 +101,6 @@ export default function Partecipazione() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email,
-          corpo_mail: `
-          Partecipanti: ${formData.partecipanti}
-          Bambini: ${formData.bambini}
-          Dettaglio partecipanti:
-          ${formData.persone.map(p => `Nome: ${p.nome}, Preferenza: ${p.preferenza}, Allergie: ${p.allergie || "Nessuna"}`).join('\n')}
-          Note aggiuntive: ${formData.note || ""}
-        `,
           partecipanti: formData.partecipanti,
           bambini: formData.bambini,
           persone: formData.persone,
