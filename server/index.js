@@ -62,15 +62,15 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
       },
     });
 
-    const corpo_mail = `
+const corpo_mail = `
 Nuova conferma di partecipazione:
-      - Email: ${email}
-      - Adulti: ${partecipanti}
-      - Bambini: ${bambini || 0}
-      - Partecipanti:
-${persone.map(p => `      -- ${p.nome} - ${(p.preferenza?.toLowerCase().includes('specificare quali') ? 'Allergie riportate di seguito' : p.preferenza)} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
-	  - Note: ${note}
-    `;
+    - Email: ${email}
+    - Adulti: ${partecipanti}
+    - Bambini: ${bambini || 0}
+    - Partecipanti:
+${persone.map(p => `        -- ${p.nome} - ${(p.preferenza?.toLowerCase().includes('specificare quali') ? 'Allergie riportate di seguito' : p.preferenza)} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
+    - Note: ${note || 'Nessuna'}
+`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
