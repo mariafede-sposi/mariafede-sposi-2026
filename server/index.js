@@ -32,7 +32,7 @@ const pool = new Pool({
 
 // Endpoint per salvataggio a DB e invio email
 app.post('/salvataggioADBedInvioEmail', async (req, res) => {
-  const { email, partecipanti, bambini, allergie, preferenze } = req.body;
+  const { email, partecipanti, bambini, persone, note } = req.body;
 
   // 1. Validazioni
   if (!email || !partecipanti) {
