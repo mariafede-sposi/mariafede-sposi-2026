@@ -29,18 +29,71 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Funzione per salvare la partecipazione sul DB
-async function salvaPartecipazioneDB({ email, partecipanti, bambini }, errori) {
+// Funzione per salvare la partecipazione sul DB con transaction
+async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, note }) {
+  const client = await pool.connect();
   try {
-    await pool.query(
-      `INSERT INTO partecipazioni (email, partecipanti, bambini)
-       VALUES ($1, $2, $3)`,
-      [email || null, partecipanti, bambini || 0]
+    await client.query('BEGIN');
+
+    // Prendi l'ID dell'indirizzo email se esiste
+    const res = await client.query(
+      `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
+      [email || persone?.[0]?.nome.replace(/\s+/g, '').toUpperCase()]
     );
+
+    let indirizzoEmailId;
+    const nomePrimoPartecipante = persone?.[0]?.nome || null;
+
+    if (res.rows.length > 0) {
+      indirizzoEmailId = res.rows[0].id;
+    } else {
+      const insertRes = await client.query(
+        `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Adulti, Bambini, Note)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id`,
+        [
+          email || nomePrimoPartecipante.replace(/\s+/g, '').toUpperCase(),
+          nomePrimoPartecipante,
+          partecipanti,
+          bambini || 0,
+          note || 'Nessuna'
+        ]
+      );
+      indirizzoEmailId = insertRes.rows[0].id;
+    }
+
+    // Inserimento ottimizzato dei partecipanti
+    if (persone && persone.length > 0) {
+      const values = [];
+      const placeholders = [];
+
+      persone.forEach((p, index) => {
+        const idx = index * 4; // 4 colonne: Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId
+        placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4})`);
+        values.push(
+          p.nome,
+          p.preferenza || 'Nessuna',
+          p.allergie || 'Nessuna allergia indicata',
+          indirizzoEmailId
+        );
+      });
+
+      await client.query(
+        `INSERT INTO Partecipanti (Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId)
+         VALUES ${placeholders.join(', ')}`,
+        values
+      );
+    }
+
+    await client.query('COMMIT');
   } catch (err) {
-    errori.push({ metodo: 'salvaPartecipazioneDB', log: err.toString() });
+    await client.query('ROLLBACK');
+    errorLog.salvaPartecipazioneDB = err.toString();
+  } finally {
+    client.release();
   }
 }
+
 
 // Funzione per inviare l'email
 async function inviaEmail({ email, partecipanti, bambini, persone, note }, errori) {
