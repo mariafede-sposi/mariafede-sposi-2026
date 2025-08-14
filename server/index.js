@@ -49,7 +49,7 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
     // 2. Salva nel DB
     await pool.query(
       `INSERT INTO partecipazioni (email, partecipanti, bambini)
-       VALUES ($1, $2, $3, $4, $5)`,
+       VALUES ($1, $2, $3)`,
       [email || '', partecipanti, bambini || 0]
     );
 
