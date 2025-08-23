@@ -41,11 +41,10 @@ html {
 }
 
 body {
-  background-image: url(./imgs/background.png);
-  background-repeat: no-repeat;
-  background-size: cover;
   color: var(--colore-testo);
   font-family: 'Fraunces';
+  background-color: #F9F6F2;
+
 }
 
 a.nav-link {
@@ -153,8 +152,12 @@ body {
   place-items: normal !important;
 }
 
+h2 {
+  font-family: "Fraunces", serif !important;
+  font-size: 2.2em;
+}
+
 h1,
-h2,
 h3 {
   font-family: "Fraunces", serif !important;
   /* Potresti anche giocare con font-variation-settings per Fraunces
@@ -168,21 +171,4 @@ h3 {
   margin-left: calc(-50vw + 50%);
   /* resetta i margini di un container */
   background-color: #9b7f71;
-}
-
-.header {
-
-  padding: 20px 0;
-  border-radius: 20px;
-  margin-bottom: 15px;
-  color: #fffcf8;
-  text-shadow: 2px 2px 4px rgb(69 26 26 / 50%);
-}
-
-.box-container {
-  background-color: #fffcf8;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 20px;
-  margin-bottom: 15px;
 }

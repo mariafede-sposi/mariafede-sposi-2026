@@ -2,9 +2,21 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
     return (
         <div>
 
-            <h2>Villa Pocci, Marino (RM)</h2>
-            <div className="row align-items-center">
-                {/* Mappa */}
+            <div className="align-items-center">
+                <h2>Il Ricevimento</h2>
+                <hr style={{ width: '300px', placeSelf: 'center' }} />
+                <h3>Villa Pocci, Marino (RM)</h3>
+                <p>
+                    📍{" "}
+                    <a
+                        href="https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Apri in Google Maps
+                    </a>
+                </p>
+                {/* Mappa
                 <div className="col-12 col-md-6 mb-3 mb-md-0">
                     <iframe
                         title="Location Ricevimento"
@@ -17,23 +29,21 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
                         referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
                 </div>
-
+                */}
+                <div className="col-12 ">
+                    <div style={{ width: '100%', textAlign: '-webkit-center' }}>
+                        <div className="bottom-svg top-svg"></div>
+                        <div className="ricevimento-img"></div>
+                        <div className="bottom-svg upside-down-bianco"></div>
+                    </div>
+                </div>
                 {/* Descrizione */}
-                <div className="col-12 col-md-6">
-                    <p>
-                        📍{" "}
-                        <a
-                            href="https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Apri in Google Maps
-                        </a>
-                    </p>
+                <div className="col-12 " style={{ padding: '0 20px' }}>
                     <p>Occhio che ci sono <strong>tre</strong> cancelli di entrata, quello giusto è <strong>quello centrale</strong>! Se avete problemi di deambulazione fatecelo sapere e ci mettiamo d'accordo con il ristorante per farvi entrare da un punto dove non siete obbligati a fare scale.</p>
 
 
                 </div>
+                <hr style={{ width: '300px', placeSelf: 'center' }} />
             </div>
         </div>
     );

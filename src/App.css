@@ -6,8 +6,10 @@
   margin-top: 55px;
   width: 100%;
 
-  max-width: 1200px;
-  padding: 20px;
+  max-width: 1000px;
+  box-shadow: 0 0 12px 0px #d3d0cb;
+  padding: 20px 0;
+  background-color: #fff;
 }
 
 .logo {
@@ -96,8 +98,6 @@ label {
   background-position: center;
   width: 100%;
   height: 300px;
-  box-shadow: rgb(0 0 0 / 47%) 0 0 5px;
-  border-radius: 20px;
 }
 
 
@@ -120,14 +120,6 @@ label {
   place-self: center;
 }
 
-
-.navbar {
-  background-color: #fffcf8;
-  border-bottom-right-radius: 20px;
-  border-bottom-left-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0 0px 3px;
-}
-
 .chi-siamo-text {
   max-height: 300px;
   overflow-y: auto;
@@ -142,5 +134,157 @@ label {
 @keyframes fadeInAnimation {
   to {
     opacity: 1;
+  }
+}
+
+/* NAVBAR */
+
+/* Desktop menu */
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.nav-links li {
+  position: relative;
+  padding: 0 0.75rem;
+}
+
+
+.nav-links li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-links li a:hover {
+  color: #e91e63;
+}
+
+/* Bottone hamburger nascosto su desktop */
+.hamburger {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile menu nascosto di default */
+.mobile-menu {
+  position: absolute;
+  top: 56px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.mobile-menu ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* CHIESA */
+
+.chiesa-img {
+  background-image: url('https://www.visitcastelliromani.it/wp-content/uploads/2019/01/Ariccia-Collegiata-dellAssunta-e-Piazza-di-Corte-870.jpg');
+  height: 300px;
+  max-width: 700px;
+  width: auto;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: bottom;
+  background-position-x: right;
+}
+
+.top-svg {
+
+  z-index: 999;
+  position: relative;
+  margin-bottom: -60px;
+}
+
+.bottom-svg {
+
+  background-image: url(/src/imgs/grunge-divider-3.svg);
+  height: 100px;
+}
+
+.upside-down-bianco {
+  background-image: url(/src/imgs/grunge-divider-3.svg);
+  margin-top: -60px;
+  transform: rotate(180deg);
+  display: block;
+}
+
+.upside-down {
+  background-image: url(/src/imgs/grunge-divider-colorato.svg);
+  margin-top: -60px;
+  transform: rotate(180deg);
+  display: block;
+}
+
+
+/* RICEVIMENTO */
+
+.ricevimento-img {
+  background-image: url('https://cdn0.matrimonio.com/vendor/6270/3_2/960/jpg/-min2358_2_176270.jpeg');
+  height: 300px;
+  max-width: 700px;
+  width: auto;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: center;
+  background-position-x: center;
+}
+
+/* CHI SIAMO */
+
+.disneyland-foto {
+  height: 500px;
+  align-content: center;
+  background:
+
+    url(/src/imgs/foto-con-fede-ritagliata.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: center;
+  background-position-x: center;
+  position: relative;
+}
+
+.disneyland-foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  /* 0.2 = scurisce l'immagine = 80% visibile */
+}
+
+
+/* Responsività */
+@media (max-width: 1000px) {
+  .nav-links {
+    display: none;
+    /* sparisce su mobile */
+  }
+
+  .hamburger {
+    display: block;
+    /* appare su mobile */
   }
 }

@@ -15,12 +15,12 @@
 
 
 .countdown-container {
-    max-width: 600px;
-    margin: 2rem auto;
+    background-color: #F9F6F2;
     padding: 0;
     font-family: 'Fraunces';
     color: var(--colore-testo);
     text-align: center;
+    margin-top: -2px;
 }
 
 .countdown-title {

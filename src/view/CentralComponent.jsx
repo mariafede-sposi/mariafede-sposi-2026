@@ -17,9 +17,11 @@ export default function CentralComponent() {
         <FadeInWrapper><InformazioniGenerali /></FadeInWrapper>
       </section>
 
+{/* 
       <section id="chi-siamo" className='box-container' >
         <FadeInWrapper><ChiSiamo /></FadeInWrapper>
       </section>
+*/}
 
       <section id="chiesa" className='box-container' >
         <FadeInWrapper><LaChiesa /></FadeInWrapper>
