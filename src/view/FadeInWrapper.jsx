@@ -9,7 +9,7 @@ export default function FadeInWrapper({ children }) {
   }, []);
 
   return (
-    <div className={isVisible ? 'fade-in' : ''}>
+    <div>
       {children}
     </div>
   );

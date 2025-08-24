@@ -1,7 +1,7 @@
 export default function LaChiesa({ show, handleShow, handleClose }) {
 
     return (
-        <div >
+        <div style={{ marginTop: 30 }} >
 
 
 
@@ -49,14 +49,56 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
 
             </div>
             <div className="col-12 ">
-                <div style={{ width: '100%', textAlign: '-webkit-center' }}>
-                    <div className="bottom-svg top-svg"></div>
-                    <div className="chiesa-img"></div>
-                    <div className="bottom-svg upside-down"></div>
+                <div style={{ width: '100%', textAlign: '-webkit-center', marginTop: 20 }}>
+                    <div className="chiesa-img">
+                        <svg
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "25px",
+                                transform: "scaleX(-1)"  // <-- specchiato orizzontalmente
+                            }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 1000 50"
+                            preserveAspectRatio="none"
+                        >
+                            <path
+                                d="M0 0v45.1C49.7 49.9 105 41 160 32.5c75.5-11.6 145.5-11.2 222-1.5 
+       63 8 119 7 173-4 79.5-16.2 156.2-13.8 240-5 
+       82.6 8.7 143-0.5 205-15.9V0H0Z"
+                                fill="#FFFFFF"
+                            />
+                        </svg>
+
+                        <svg
+                            style={{
+                                transform: 'rotate(180deg)',
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "25px",
+                            }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 1000 100"
+                            preserveAspectRatio="none"
+                        >
+                            <path
+                                d="M0 0v90.2C49.7 99.9 105 82 160 65c75.5-23.3 145.5-22.4 222-3 63 16 119 14 173-8 79.5-32.4 156.2-27.6 240-10 82.6 17.4 143-1 205-31.7V0H0Z"
+                                fill="#D7E0DD"
+                            />
+                        </svg>
+
+
+
+                    </div>
                 </div>
             </div>
-            <div className="col-12" style={{ backgroundColor: '#F9F6F2', paddingLeft: 20, paddingRight: 20, paddingBottom: 20 }}>
-                <h3>Attenzione!</h3>
+
+            <div className="col-12" style={{ backgroundColor: '#D7E0DD', padding: 20 }}>
+                <h3>Nota bene!</h3>
                 <p className="text-start">
                     Ci sposeremo di sabato e se il tempo sarà bello potrebbe essere complesso trovare parcheggio perché siamo a due passi dalle fraschette. <br />
                     Il parroco della chiesa ci ha suggerito il <strong>parcheggio Bernini</strong> (che è gratuito). <br />
@@ -64,7 +106,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                     davanti la chiesa.
                 </p>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 100"><g fill="#F9F6F2"><rect fill="#FFF" width="100%" height="100%" /><path d="M0 0v60c9 0 18-3 25-10 13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s37 13 50 0c14-14 37-14 50 0 7 7 16 10 25 10V0H0Z"></path></g></svg>
+            <svg style={{ transform: "scaleX(-1)" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><g fill="#D7E0DD"><path d="M0 0v99.7C62 69 122.4 48.7 205 66c83.8 17.6 160.5 20.4 240-12 54-22 110-26 173-10a392.2 392.2 0 0 0 222-5c55-17 110.3-36.9 160-27.2V0H0Z" opacity=".5"></path><path d="M0 0v74.7C62 44 122.4 28.7 205 46c83.8 17.6 160.5 25.4 240-7 54-22 110-21 173-5 76.5 19.4 146.5 23.3 222 0 55-17 110.3-31.9 160-22.2V0H0Z"></path></g></svg>
             {/* Mappa 
                 <div className="col-12 col-md-6 mb-3 mb-md-0">
                     <iframe
