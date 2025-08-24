@@ -11,29 +11,41 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                 <hr style={{ width: '300px', placeSelf: 'center' }} />
                 <h3>Chiesa di Santa Maria Assunta </h3>
                 <h3 style={{ marginTop: '-10px' }}> Ariccia (RM)</h3>
-                <p>
-                    📍{" "}
-                    <a
-                        href="https://maps.app.goo.gl/MTxKZ2Cbjct4fv7D8"
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{ marginRight: 10 }}
-                    >
-                        La chiesa
-                    </a>
+                <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
 
-                    📍{" "}
-                    <a
-                        href="https://maps.app.goo.gl/pZwd7HjurpzNLuxf8"
-                        target="_blank"
-                        rel="noreferrer"
+                    <div
+                        onClick={() => window.open("https://maps.app.goo.gl/MTxKZ2Cbjct4fv7D8", '_blank')}
+                        style={{ marginRight: 10 }}
+                        className="buttons"
+
                     >
-                        Parcheggio Bernini
-                    </a>
-                </p>
-                <p style={{ padding: '0 5em' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                            </svg>
+                            <div style={{ marginLeft: 5 }}>La chiesa</div>
+                        </div>
+                    </div>
+
+                    <div
+                        onClick={() => window.open("https://maps.app.goo.gl/pZwd7HjurpzNLuxf8", '_blank')}
+                        className="buttons"
+
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                            </svg>
+                            <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div style={{ padding: '0 20px' }}>
                     Le nozze saranno benedette dal nostro <i>unico, inimitabile, superfantastico, purissimo e levissimo</i> (ma ha anche dei difetti) <strong>Don Fernando Cianfriglia</strong>.
-                </p>
+                </div>
 
             </div>
             <div className="col-12 ">

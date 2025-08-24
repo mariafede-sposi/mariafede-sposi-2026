@@ -142,14 +142,22 @@ export default function Partecipazione() {
   if (!response) {
     return (
       <div className="container my-5 text-center">
-        <h2>Parteciperai al matrimonio?</h2>
-        <div className="d-flex justify-content-center gap-3 mt-3">
+        <h2>Verrai al matrimonio?</h2>
+        <h3>Dicci se ci sarai!</h3>
+        <div>Faccelo sapere cliccando su uno dei pulsanti qui sotto</div>
+        <div className="d-flex justify-content-center gap-3 " style={{ padding: '40px 0' }}>
           <button className="btn btn-primary px-4" onClick={() => setResponse("yes")}>
             Parteciperò
           </button>
           <button className="btn btn-secondary px-4" onClick={() => setResponse("no")}>
             Non parteciperò
           </button>
+        </div>
+        <div>
+          <div>Puoi anche comunicarcelo telefonicamente o su whatsapp ai numeri:</div>
+          <br />
+          <div style={{ fontSize: '1.2em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
+          <div style={{ fontSize: '1.2em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
         </div>
       </div>
     );
@@ -167,8 +175,7 @@ export default function Partecipazione() {
           <br />
           <br />
           Ci trovi ai numeri:
-        </p>
-        <br /> <br />
+        </p>  <br />
         <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
         <p style={{ fontSize: '1.3em' }}> <strong>Federico</strong> +39 373 743 11 23</p>
 

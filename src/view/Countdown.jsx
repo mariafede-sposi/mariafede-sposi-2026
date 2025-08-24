@@ -40,13 +40,20 @@ export default function Countdown() {
 
     return (
         <div className="countdown-container">
-            <h3>L'evento si terrà tra:</h3>
-            <div className="countdown-timer">
+            <h4 style={{ paddingTop: 20 }}>Ti aspettiamo per festeggiare<br /> il nostro matrimonio </h4>
+            <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center', paddingTop: 20 }}>
+                <div style={{ marginRight: 15 }} className="nome-con-border"><b>Sabato</b></div>
+                <div style={{ fontSize: '2em' }}><b>14</b></div>
+                <div className="nome-con-border" style={{ marginLeft: 15 }}><b>Febbraio</b></div>
+            </div>
+            <h4 style={{ paddingTop: 20 }}>Mancano: </h4>
+            <div style={{ marginTop: 20 }} className="countdown-timer">
                 <TimeBlock label="Giorni" value={timeLeft.days} />
                 <TimeBlock label="Ore" value={timeLeft.hours} />
                 <TimeBlock label="Minuti" value={timeLeft.minutes} />
                 <TimeBlock label="Secondi" value={timeLeft.seconds} />
             </div>
+
         </div>
     );
 }

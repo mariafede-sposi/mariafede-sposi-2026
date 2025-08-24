@@ -8,7 +8,6 @@
 
   max-width: 1000px;
   box-shadow: 0 0 12px 0px #d3d0cb;
-  padding: 20px 0;
   background-color: #fff;
 }
 
@@ -29,6 +28,32 @@
 
 label {
   text-align: left;
+}
+
+.nome-con-border {
+  border-top: 1px solid var(--colore-testo);
+  border-bottom: 1px solid var(--colore-testo);
+  align-content: center;
+  font-size: 1.8em;
+}
+
+.buttons {
+  background-color: var(--colore-primario);
+  padding: 5px 20px;
+  color: var(--colore-testo);
+  text-decoration: none !important;
+  cursor: pointer;
+  border-radius: 20px;
+  max-width: 220px;
+  justify-self: center;
+}
+
+.copia-iban {
+
+  color: var(--colore-testo);
+  max-width: 300px !important;
+  display: flex;
+  align-items: center;
 }
 
 @keyframes logo-spin {

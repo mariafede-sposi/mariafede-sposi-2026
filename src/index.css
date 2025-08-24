@@ -57,6 +57,11 @@ a.nav-link:hover {
   text-decoration: underline;
 }
 
+.btn {
+
+  border-radius: 20px !important;
+}
+
 button.btn-primary {
   background-color: var(--rosa-cipria);
   border-color: var(--rosa-cipria);
@@ -163,6 +168,11 @@ h3 {
   /* Potresti anche giocare con font-variation-settings per Fraunces
      se usi la versione variabile, es: font-variation-settings: 'opsz' 100, 'wght' 700;
   */
+}
+
+section {
+  scroll-margin-top: 100px;
+  /* spazio sopra la sezione quando viene scrollata */
 }
 
 .full-width-section {
