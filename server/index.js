@@ -7,35 +7,36 @@ const { Pool } = pkg;
 
 const app = express();
 
+// -------------------- CORS --------------------
+const allowedOrigin = 'https://mariafede-sposi.github.io';
+
 app.use(cors({
-  origin: 'https://mariafede-sposi.github.io',
-  methods: ['GET', 'POST'],
-  credentials: false
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: false,
 }));
 
-app.use((req, res, next) => {
-  const allowedOrigin = 'https://mariafede-sposi.github.io';
-  const requestOrigin = req.get('origin');
-  if (requestOrigin !== allowedOrigin) {
-    return res.status(403).send('Accesso non autorizzato');
-  }
-  next();
-});
+app.options('*', cors({
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'OPTIONS'],
+}));
 
 app.use(express.json());
 
+// -------------------- Connessione DB --------------------
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
-// Funzione per salvare la partecipazione sul DB con transaction
-async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, note }) {
+// -------------------- Funzioni --------------------
+
+// Salvataggio partecipazione con transaction
+async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, note }, errori) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
-    // Prendi l'ID dell'indirizzo email se esiste
     const res = await client.query(
       `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
       [email || persone?.[0]?.nome.replace(/\s+/g, '').toUpperCase()]
@@ -62,13 +63,12 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
       indirizzoEmailId = insertRes.rows[0].id;
     }
 
-    // Inserimento ottimizzato dei partecipanti
     if (persone && persone.length > 0) {
       const values = [];
       const placeholders = [];
 
       persone.forEach((p, index) => {
-        const idx = index * 4; // 4 colonne: Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId
+        const idx = index * 4;
         placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4})`);
         values.push(
           p.nome,
@@ -88,16 +88,17 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
     await client.query('COMMIT');
   } catch (err) {
     await client.query('ROLLBACK');
-    errorLog.salvaPartecipazioneDB = err.toString();
+    errori.push({ metodo: 'salvaPartecipazioneDB', log: err.toString() });
+    console.error('Errore salvaPartecipazioneDB:', err);
   } finally {
     client.release();
   }
 }
 
-
-// Funzione per inviare l'email
+// Invio email di conferma
 async function inviaEmail({ email, partecipanti, bambini, persone, note }, errori) {
-  if (!email) return; // non inviare email se campo vuoto
+  if (!email) return;
+
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -109,12 +110,12 @@ async function inviaEmail({ email, partecipanti, bambini, persone, note }, error
 
     const corpo_mail = `
 Nuova conferma di partecipazione:
-    - Email: ${email}
-    - Adulti: ${partecipanti}
-    - Bambini: ${bambini || 0}
-    - Partecipanti:
-${persone.map(p => `        -- ${p.nome} - ${(p.preferenza?.toLowerCase().includes('specificare quali') ? 'Allergie riportate di seguito' : p.preferenza)} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
-    - Note: ${note || 'Nessuna'}
+- Email: ${email}
+- Adulti: ${partecipanti}
+- Bambini: ${bambini || 0}
+- Partecipanti:
+${persone.map(p => `    -- ${p.nome} - ${(p.preferenza?.toLowerCase().includes('specificare quali') ? 'Allergie riportate di seguito' : p.preferenza)} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
+- Note: ${note || 'Nessuna'}
     `;
 
     await transporter.sendMail({
@@ -125,11 +126,13 @@ ${persone.map(p => `        -- ${p.nome} - ${(p.preferenza?.toLowerCase().includ
     });
   } catch (err) {
     errori.push({ metodo: 'inviaEmail', log: err.toString() });
+    console.error('Errore inviaEmail:', err);
   }
 }
 
-// Funzione per inviare mail di alert in caso di errori
+// Invio email di alert in caso di errori
 async function inviaMailErrore(payload, errori) {
+  if (errori.length === 0) return;
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -158,30 +161,29 @@ ${logTesto}
       text: testo,
     });
   } catch (err) {
-    console.error('Errore durante l\'invio della mail di alert:', err);
+    console.error('Errore invio mail di alert:', err);
   }
 }
 
-// Endpoint principale
+// -------------------- Endpoint --------------------
 app.post('/salvataggioADBedInvioEmail', async (req, res) => {
   const { email, partecipanti, bambini, persone, note } = req.body;
 
-  if (!partecipanti) return res.status(400).send('Numero partecipanti è obbligatorio');
-  if (partecipanti < 1) return res.status(400).send('Il numero di partecipanti deve essere almeno 1');
+  if (!partecipanti || partecipanti < 1) return res.status(400).send('Numero partecipanti non valido');
   if (email && !email.match(/^[\w.-]+@[\w.-]+\.\w{2,}$/)) return res.status(400).send('Email non valida');
 
+  // Risposta immediata al FE
   res.status(200).send('Richiesta ricevuta, elaborazione in corso');
 
+  // Elaborazione in background
   const errori = [];
   const payload = { email, partecipanti, bambini, persone, note };
 
   await salvaPartecipazioneDB(payload, errori);
   await inviaEmail(payload, errori);
-
-  if (errori.length > 0) {
-    await inviaMailErrore(payload, errori);
-  }
+  await inviaMailErrore(payload, errori);
 });
 
+// -------------------- Avvio Server --------------------
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Server attivo su porta ${port}`));
