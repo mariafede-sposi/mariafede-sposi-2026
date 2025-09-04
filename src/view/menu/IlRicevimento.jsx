@@ -78,7 +78,7 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
 
                 {/* Descrizione */}
                 <div className="col-12 " style={{ backgroundColor: '#D7E0DD', padding: 20 }}>
-                    <h3>Nota bene!</h3>
+                    <h2>Nota bene!​</h2>
                     <p className="text-start"> Ci sono <strong>tre</strong> cancelli di entrata, quello giusto è <strong>quello centrale</strong>! Se avete problemi di deambulazione fatecelo sapere e ci mettiamo d'accordo con il ristorante per farvi entrare da un punto dove non siete obbligati a fare scale.</p>
 
 

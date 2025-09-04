@@ -213,7 +213,7 @@ export default function Partecipazione() {
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-4" noValidate>
           <div className="form-group">
             <label htmlFor="email" className="fw-semibold mb-2">
-              Email:
+              Email di riferimento:
             </label>
             <input
               type="email"
@@ -266,7 +266,7 @@ export default function Partecipazione() {
             <div
               key={i}
               className="border rounded p-3 mb-3"
-              style={{ backgroundColor: "#fdf8f3" }}
+              style={{ backgroundColor: "#f4f4f4" }}
             >
               <h6 className="mb-3">
                 {i < formData.partecipanti

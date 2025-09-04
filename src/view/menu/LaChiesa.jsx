@@ -27,21 +27,6 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                             <div style={{ marginLeft: 5 }}>La chiesa</div>
                         </div>
                     </div>
-
-                    <div
-                        onClick={() => window.open("https://maps.app.goo.gl/pZwd7HjurpzNLuxf8", '_blank')}
-                        className="buttons"
-
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-                            </svg>
-                            <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
-
-                        </div>
-                    </div>
                 </div>
                 <div style={{ padding: '0 20px' }}>
                     Le nozze saranno benedette dal nostro <i>unico, inimitabile, superfantastico, purissimo e levissimo</i> (ma ha anche dei difetti) <strong>Don Fernando Cianfriglia</strong>.
@@ -98,13 +83,28 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
             </div>
 
             <div className="col-12" style={{ backgroundColor: '#D7E0DD', padding: 20 }}>
-                <h3>Nota bene!</h3>
+                <h2>​Nota bene!</h2>
                 <p className="text-start">
                     Ci sposeremo di sabato e se il tempo sarà bello potrebbe essere complesso trovare parcheggio perché siamo a due passi dalle fraschette. <br />
                     Il parroco della chiesa ci ha suggerito il <strong>parcheggio Bernini</strong> (che è gratuito). <br />
                     C'è un ascensore per salire dal parcheggio alla chiesa e quello è a pagamento (costa circa 1€ e può trasportare più o meno 20 persone da quanto ci dicono). L'ascensore arriva direttamente in piazza, davanti palazzo Chigi che è a sua volta
                     davanti la chiesa.
                 </p>
+
+                <div
+                    onClick={() => window.open("https://maps.app.goo.gl/pZwd7HjurpzNLuxf8", '_blank')}
+                    className="buttons"
+                    style={{ backgroundColor: '#f4f4f4' }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                        </svg>
+                        <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
+
+                    </div>
+                </div>
             </div>
             <svg style={{ transform: "scaleX(-1)" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><g fill="#D7E0DD"><path d="M0 0v99.7C62 69 122.4 48.7 205 66c83.8 17.6 160.5 20.4 240-12 54-22 110-26 173-10a392.2 392.2 0 0 0 222-5c55-17 110.3-36.9 160-27.2V0H0Z" opacity=".5"></path><path d="M0 0v74.7C62 44 122.4 28.7 205 46c83.8 17.6 160.5 25.4 240-7 54-22 110-21 173-5 76.5 19.4 146.5 23.3 222 0 55-17 110.3-31.9 160-22.2V0H0Z"></path></g></svg>
             {/* Mappa 

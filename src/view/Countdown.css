@@ -54,7 +54,7 @@
 
 .time-label {
     font-size: clamp(0.8rem, 2.5vw, 1.4rem);
-    color: var(--colore-testo-hover);
+    color: #757b79;
     font-style: italic;
     letter-spacing: 0.5px;
 }

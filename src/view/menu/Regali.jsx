@@ -28,6 +28,7 @@ export default function Regali({ show, handleShow, handleClose }) {
                 <div
                     onClick={() => copiaIBAN('IT07M0306973981100000008064')}
                     className="buttons copia-iban"
+                    style={{ backgroundColor: '#f4f4f4' }}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
@@ -44,6 +45,7 @@ export default function Regali({ show, handleShow, handleClose }) {
                 <div
                     onClick={() => copiaIBAN('IT03P3608105138294612294618')}
                     className="buttons copia-iban"
+                    style={{ backgroundColor: '#f4f4f4' }}
 
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">

@@ -6,7 +6,7 @@ export default function Navbar() {
   const links = [
     ["chi-siamo", "Chi siamo"],
     ["informazioni", "Informazioni generali"],
-    ["chiesa", "La chiesa"],
+    ["chiesa", "La celebrazione"],
     ["ricevimento", "Il ricevimento"],
     ["partecipazione", "Partecipazione"],
     ["regali", "Regali"],
@@ -25,7 +25,7 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        background: "white", 
+        background: "white",
       }}
     >
       {/* Logo */}
