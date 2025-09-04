@@ -11,7 +11,11 @@ const app = express();
 const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0; // timeout in ms
 
 // -------------------- CORS --------------------
-const allowedOrigin = 'https://mariafede-sposi.github.io';
+const allowedOrigin = [
+  'https://mariafede-sposi.github.io',
+  'https://www.mariafedesposi2026.it',
+  'http://localhost:5173'
+];
 
 app.use(cors({
   origin: allowedOrigin,
