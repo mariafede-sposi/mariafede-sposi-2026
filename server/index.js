@@ -14,7 +14,8 @@ const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0; // timeout in
 const allowedOrigin = [
   'https://mariafede-sposi.github.io',
   'https://www.mariafedesposi2026.it',
-  'http://localhost:5173'
+  'http://localhost:5173',
+  'https://uptimerobot.com'
 ];
 
 app.use(cors({
@@ -220,4 +221,10 @@ app.post('/salvataggioADBedInvioEmail', async (req, res) => {
 
 // -------------------- Avvio Server --------------------
 const port = process.env.PORT || 3001;
+
+// -------------------- Endpoint KeepAlive --------------------
+app.get('/keepalive', (req, res) => {
+  res.status(200).send('OK - KeepAlive attivo');
+});
+
 app.listen(port, () => console.log(`Server attivo su porta ${port}`));
