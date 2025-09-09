@@ -9,14 +9,14 @@ const { Pool } = pkg;
 const app = express();
 
 // -------------------- Config variabili --------------------
-const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0; // timeout in ms
+const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0;
 
 // -------------------- CORS --------------------
 const allowedOrigin = [
   'https://mariafede-sposi.github.io',
   'https://www.mariafedesposi2026.it',
   'http://localhost:5173',
-  'https://uptimerobot.com'   // aggiunto per UptimeRobot
+  'https://uptimerobot.com'
 ];
 
 app.use(cors({
@@ -52,14 +52,20 @@ async function withTimeout(fn, ms = TIMEOUT_MS, label = "Operazione") {
   ]);
 }
 
+// -------------------- Middleware Token --------------------
+function checkToken(req, res, next) {
+  if (req.headers['x-api-token'] !== process.env.TOKEN_PASSKEY) {
+    return res.status(403).send('Forbidden: token mancante o non valido');
+  }
+  next();
+}
+
 // -------------------- Endpoint KeepAlive --------------------
 app.get('/keepalive', (req, res) => {
   res.status(200).send('OK - KeepAlive attivo');
 });
 
 // -------------------- Funzioni principali --------------------
-
-// Salvataggio partecipazione con DB sicuro
 async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, note }, errori) {
   return withTimeout(async () => {
     const client = await pool.connect();
@@ -125,7 +131,6 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
   }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
 
-// Invio email di conferma sicuro
 async function inviaEmail({ email, partecipanti, bambini, persone, note }, errori) {
   return withTimeout(async () => {
     if (!email) return;
@@ -170,7 +175,6 @@ ${personeSafe.map(p => `    -- ${p.nome} - ${p.preferenza} - ${p.allergie}`).joi
   }, TIMEOUT_MS, "inviaEmail");
 }
 
-// Invio email di alert sicuro
 async function inviaMailErrore(payload, errori) {
   return withTimeout(async () => {
     if (errori.length === 0) return;
@@ -216,23 +220,20 @@ ${logTesto}
   }, TIMEOUT_MS, "inviaMailErrore");
 }
 
-// -------------------- Endpoint principale --------------------
-app.post('/salvataggioADBedInvioEmail', async (req, res) => {
+// -------------------- Endpoint principale con TOKEN_PASSKEY --------------------
+app.post('/salvataggioADBedInvioEmail', checkToken, async (req, res) => {
   const { email, partecipanti, bambini, persone, note } = req.body;
   const erroriValidazione = [];
 
-  // Validazione numeri
   if (!Number.isInteger(partecipanti) || partecipanti < 1) erroriValidazione.push('Numero partecipanti non valido');
   if (bambini !== undefined && (!Number.isInteger(bambini) || bambini < 0)) erroriValidazione.push('Numero bambini non valido');
 
-  // Validazione email
   let emailSanitized = null;
   if (email) {
     if (!validator.isEmail(email)) erroriValidazione.push('Email non valida');
     else emailSanitized = validator.normalizeEmail(email);
   }
 
-  // Sanitizzazione note e persone
   const noteSanitized = note ? validator.escape(note) : 'Nessuna';
   const personeSanitized = Array.isArray(persone) ? persone.map(p => ({
     nome: p.nome ? validator.escape(p.nome) : 'Anonimo',
