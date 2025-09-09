@@ -98,7 +98,10 @@ export default function Partecipazione() {
     try {
       const res = await fetch(`${import.meta.env.VITE_BE_URL}/salvataggioADBedInvioEmail`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': import.meta.env.VITE_TOKEN_PASSKEY
+        },
         body: JSON.stringify({
           email: formData.email,
           partecipanti: formData.partecipanti,
