@@ -63,9 +63,9 @@ a.nav-link:hover {
 }
 
 button.btn-primary {
-  background-color: var(--rosa-cipria);
-  border-color: var(--rosa-cipria);
-  color: var(--colore-testo);
+  background-color: #2d392c;
+  border-color: #2d392c;
+  color: #fafafa;
   font-weight: 600;
 }
 
@@ -77,8 +77,8 @@ button.btn-primary {
 }
 
 button.btn-primary:hover {
-  background-color: var(--rosa-cipria);
-  border-color: var(--rosa-cipria);
+  background-color: #2d392c;
+  border-color: #2d392c;
   color: var(--bianco-avorio);
 }
 
@@ -193,4 +193,12 @@ section {
   /* centra l'immagine orizzontalmente e verticalmente */
   transform: rotate(170deg);
   /* usa transform invece di rotate per compatibilità */
+}
+
+.slide_imgs {
+  height: 400px;
+  width: 400px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }

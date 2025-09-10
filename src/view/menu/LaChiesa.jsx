@@ -90,19 +90,20 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                     C'è un ascensore per salire dal parcheggio alla chiesa e quello è a pagamento (costa circa 1€ e può trasportare più o meno 20 persone da quanto ci dicono). L'ascensore arriva direttamente in piazza, davanti palazzo Chigi che è a sua volta
                     davanti la chiesa.
                 </p>
+                <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
+                    <div
+                        onClick={() => window.open("https://maps.app.goo.gl/pZwd7HjurpzNLuxf8", '_blank')}
+                        className="buttons"
+                        style={{ backgroundColor: '#f4f4f4' }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
 
-                <div
-                    onClick={() => window.open("https://maps.app.goo.gl/pZwd7HjurpzNLuxf8", '_blank')}
-                    className="buttons"
-                    style={{ backgroundColor: '#f4f4f4' }}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                            </svg>
+                            <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-                        </svg>
-                        <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
-
+                        </div>
                     </div>
                 </div>
             </div>

@@ -160,7 +160,7 @@ export default function Partecipazione() {
           onClick={handleReset}
           disabled={loading}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
               <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.916.5.5 0 1 1 .908-.418A6 6 0 1 1 8 2v1z" />
               <path d="M8 1a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 5.293V1.5A.5.5 0 0 1 8 1z" />
@@ -278,7 +278,6 @@ export default function Partecipazione() {
               placeholder="esempio@tuaemail.it"
               className="form-control"
             />
-
           </div>
 
           {/* Persone */}
@@ -290,7 +289,7 @@ export default function Partecipazione() {
                   Partecipante {i + 1}
 
                   {/* Bottone rimuovi */}
-                  {formData.persone.length > 1 && ( // assicuriamoci che ci sia sempre almeno un partecipante
+                  {formData.persone.length > 1 && (
                     <button
                       type="button"
                       onClick={() => {
@@ -378,7 +377,7 @@ export default function Partecipazione() {
             </React.Fragment>
           ))}
 
-          <div className="  mb-3">
+          <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
             <button
               type="button"
               className="buttons copia-iban"
@@ -391,7 +390,13 @@ export default function Partecipazione() {
                 }));
               }}
             >
-              Aggiungi partecipante
+              <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-person-plus" viewBox="0 0 16 16">
+                  <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                  <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
+                </svg>
+                <div className="ms-2">Aggiungi partecipante</div>
+              </div>
             </button>
           </div>
           {/* Note aggiuntive */}
@@ -414,7 +419,7 @@ export default function Partecipazione() {
           <div className="d-flex justify-content-center">
             <button
               type="submit"
-              className="btn btn-primary px-4 w-100 w-md-auto"
+              className="btn btn-primary px-4 w-100 w-md-auto buttons  "
               style={{ maxWidth: "200px" }}
               disabled={loading}
             >
@@ -425,7 +430,7 @@ export default function Partecipazione() {
                 </div>
               ) : (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
                     <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
                   </svg>
                   <div style={{ marginLeft: 5 }}>Invia</div>
@@ -433,8 +438,6 @@ export default function Partecipazione() {
               )}
             </button>
           </div>
-
-
         </form>
 
         <section className="mt-5">
