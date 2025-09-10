@@ -119,17 +119,18 @@ async function salvaPartecipazioneDB(payload, errori) {
         // Somma Partecipanti e Bambini e concatena le note
         await client.query(
           `UPDATE Indirizzi_Email
-           SET Note = CONCAT_WS(' | ', Note, $1),
-               Partecipanti = Partecipanti + $2,
-               Bambini = Bambini + $3
-           WHERE Id = $4`,
+          SET Note = CONCAT_WS(' | ', Note, $1::text),
+            Partecipanti = Partecipanti + $2,
+            Bambini = Bambini + $3
+          WHERE Id = $4`,
           [
-            payload.note || '',
+            payload.note || '', // se vuota rimane '', ma ora PostgreSQL sa che è TEXT
             payload.partecipanti,
             payload.bambini || 0,
             indirizzoEmailId
           ]
         );
+
 
       } else {
         // Inserimento nuovo record
