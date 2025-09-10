@@ -32,7 +32,7 @@ export default function ChiSiamo() {
     return (
         <div className="row">
             {/* Colonna testo */}
-            <div className="col-md-6 d-flex align-items-center ps-5">
+            <div className="col-md-6 d-flex align-items-center" style={{ padding: '0 40px' }}>
                 <p>
                     Maria Teresa e Federico si conoscono all'università anche se il loro amore
                     sboccerà qualche anno dopo. Superati i primi ostacoli di coppia come il
