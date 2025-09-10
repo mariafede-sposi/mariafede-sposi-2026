@@ -14,6 +14,7 @@ export default function Partecipazione() {
 
   const [submitted, setSubmitted] = useState(false);
   const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const graziePerLaConferma = useRef(null);
 
@@ -75,23 +76,44 @@ export default function Partecipazione() {
     });
   }, [formData.partecipanti, formData.bambini]);
 
+
+
+  const handleReset = () => {
+    setFormData({
+      partecipanti: 1,
+      bambini: 0,
+      email: "",
+      persone: [],
+      note: "",
+    });
+    setResponse(null);
+    setSubmitted(false);
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // 🔹 mostra loader
 
-    const emailValida = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
-    if (!emailValida) {
-      toast.error("Inserisci un indirizzo email valido.");
-      return;
+    if (formData.email) {
+      const emailValida = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+      if (!emailValida) {
+        toast.error("Inserisci un indirizzo email valido.");
+        setLoading(false);
+        return;
+      }
     }
 
     if (formData.partecipanti < 1) {
       toast.error("Deve esserci almeno un partecipante adulto.");
+      setLoading(false);
       return;
     }
 
     const nomiVuoti = formData.persone.some(p => p.nome.trim() === "");
     if (nomiVuoti) {
       toast.error("Inserisci il nome di tutti i partecipanti e bambini.");
+      setLoading(false);
       return;
     }
 
@@ -112,13 +134,16 @@ export default function Partecipazione() {
       });
 
       setSubmitted(true);
-      scrollToTarget()
-      toast.success("Hai compilato tutto il form! Che top!!")
+      scrollToTarget();
+      toast.success("Hai compilato tutto il form! Che top!!");
     } catch (err) {
       console.error(err);
       toast.error('Errore durante l’invio, riprova più tardi.');
+    } finally {
+      setLoading(false); // 🔹 nascondi loader
     }
   };
+
 
   const scrollToTarget = () => {
     if (graziePerLaConferma.current) {
@@ -131,13 +156,32 @@ export default function Partecipazione() {
 
   if (submitted) {
     return (
-      <div ref={graziePerLaConferma}>
-        <h2>Grazie per la conferma! 🥰​🎉​🎉​</h2>
-        <p>Abbiamo ricevuto la tua risposta.</p>
-        <p>
-          Se tutto è andato a buon fine, riceverai una mail riepilogativa entro qualche minuto!
-        </p>
-        <p>Non vediamo l'ora di stare insieme, ti vogliamo bene campione!</p>
+      <div>
+
+        <div ref={graziePerLaConferma}>
+          <h2>Grazie per la conferma! 🥰​🎉​🎉​</h2>
+          <p>Abbiamo ricevuto la tua risposta.</p>
+          <p>
+            Se tutto è andato a buon fine, riceverai una mail riepilogativa entro qualche minuto!
+          </p>
+          <p>Non vediamo l'ora di stare insieme, ti vogliamo bene campione!</p>
+        </div>
+        {/* Bottone reset */}
+        <button
+          type="button"
+          className="buttons copia-iban"
+          style={{ maxWidth: "250px", border: 0, marginBottom: 5 }}
+          onClick={handleReset}
+          disabled={loading}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+              <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.916.5.5 0 1 1 .908-.418A6 6 0 1 1 8 2v1z" />
+              <path d="M8 1a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 5.293V1.5A.5.5 0 0 1 8 1z" />
+            </svg>
+            <div style={{ marginLeft: 5 }}>Mandaci una nuova richiesta</div>
+          </div>
+        </button>
       </div>
     );
   }
@@ -218,6 +262,7 @@ export default function Partecipazione() {
             <label htmlFor="email" className="fw-semibold mb-2">
               Email di riferimento:
             </label>
+            <div style={{ fontSize: 14, marginBottom: 5 }}>Non è un campo obbligatorio, serve per mandarti una mail di conferma!</div>
             <input
               type="email"
               id="email"
@@ -281,6 +326,7 @@ export default function Partecipazione() {
                 <label className="fw-semibold mb-1" htmlFor={`nome-${i}`}>
                   Nome:
                 </label>
+                <div style={{ fontSize: 14, marginBottom: 5 }}>Inserisci il nome e il cognome di almeno uno dei partecipanti! </div>
                 <input
                   id={`nome-${i}`}
                   type="text"
@@ -350,16 +396,28 @@ export default function Partecipazione() {
 
           {/* Bottone centrato */}
           <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-primary px-5">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
-                </svg>
-                <div style={{ marginLeft: 5 }}>Invia</div>
-              </div>
-
+            <button
+              type="submit"
+              className="btn btn-primary px-4 w-100 w-md-auto"
+              style={{ maxWidth: "200px" }}
+              disabled={loading}
+            >
+              {loading ? (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div className="spinner-border spinner-border-sm me-2" role="status"></div>
+                  Invio in corso...
+                </div>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                  </svg>
+                  <div style={{ marginLeft: 5 }}>Invia</div>
+                </div>
+              )}
             </button>
           </div>
+
 
         </form>
 
