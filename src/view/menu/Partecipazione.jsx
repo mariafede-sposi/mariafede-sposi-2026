@@ -6,9 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Partecipazione() {
   const [formData, setFormData] = useState({
     partecipanti: 1,
-    bambini: 0,
     email: "",
-    persone: [],
+    persone: [
+      { nome: "", tipo: "adulto", preferenza: "Nessuna", allergie: "" }
+    ],
     note: "",
   });
 
@@ -31,20 +32,24 @@ export default function Partecipazione() {
 
     setFormData((prev) => {
       if (name === "partecipanti") {
-        return {
-          ...prev,
-          partecipanti: value === "" ? "" : Math.max(1, Number(value)),
-        };
+        const valueNum = value === "" ? "" : Math.max(1, Number(value));
+        let personeAggiornate = [...prev.persone];
+
+        if (valueNum > personeAggiornate.length) {
+          for (let i = personeAggiornate.length; i < valueNum; i++) {
+            personeAggiornate.push({ nome: "", tipo: "adulto", preferenza: "Nessuna", allergie: "" });
+          }
+        } else if (valueNum < personeAggiornate.length) {
+          personeAggiornate = personeAggiornate.slice(0, valueNum);
+        }
+
+        return { ...prev, partecipanti: valueNum, persone: personeAggiornate };
+      } else {
+        return { ...prev, [name]: value };
       }
-      if (name === "bambini") {
-        return {
-          ...prev,
-          bambini: value === "" ? "" : Math.max(0, Number(value)),
-        };
-      }
-      return { ...prev, [name]: value };
     });
   };
+
 
 
   const handlePersonChange = (index, field, value) => {
@@ -56,34 +61,15 @@ export default function Partecipazione() {
     setFormData((prev) => ({ ...prev, persone: updatedPersone }));
   };
 
-  useEffect(() => {
-    const partecipantiNum = Number(formData.partecipanti) || 0;
-    const bambiniNum = Number(formData.bambini) || 0;
-    const totale = partecipantiNum + bambiniNum;
-
-    setFormData((prev) => {
-      let newPersone = [...prev.persone];
-
-      if (newPersone.length < totale) {
-        for (let i = newPersone.length; i < totale; i++) {
-          newPersone.push({ nome: "", preferenza: "Nessuna", allergie: "" });
-        }
-      } else if (newPersone.length > totale) {
-        newPersone = newPersone.slice(0, totale);
-      }
-
-      return { ...prev, persone: newPersone };
-    });
-  }, [formData.partecipanti, formData.bambini]);
-
 
 
   const handleReset = () => {
     setFormData({
       partecipanti: 1,
-      bambini: 0,
       email: "",
-      persone: [],
+      persone: [
+        { nome: "", tipo: "adulto", preferenza: "Nessuna", allergie: "" }
+      ],
       note: "",
     });
     setResponse(null);
@@ -110,12 +96,13 @@ export default function Partecipazione() {
       return;
     }
 
-    const nomiVuoti = formData.persone.some(p => p.nome.trim() === "");
+    const nomiVuoti = formData.persone.some(p => !p.nome.trim() || !p.tipo || !p.preferenza);
     if (nomiVuoti) {
-      toast.error("Inserisci il nome di tutti i partecipanti e bambini.");
+      toast.error("Tutti i campi dei partecipanti (nome, tipo, preferenze) sono obbligatori.");
       setLoading(false);
       return;
     }
+
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BE_URL}/salvataggioADBedInvioEmail`, {
@@ -127,7 +114,6 @@ export default function Partecipazione() {
         body: JSON.stringify({
           email: formData.email,
           partecipanti: formData.partecipanti,
-          bambini: formData.bambini,
           persone: formData.persone,
           note: formData.note
         }),
@@ -195,7 +181,7 @@ export default function Partecipazione() {
         <div className="d-flex justify-content-center gap-3 " style={{ padding: '40px 0' }}>
           <button className="btn btn-primary px-4" onClick={() => setResponse("yes")}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-emoji-smile" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5" />
               </svg>
@@ -204,7 +190,7 @@ export default function Partecipazione() {
           </button>
           <button className="btn btn-secondary px-4" onClick={() => setResponse("no")}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-frown-fill" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-emoji-frown-fill" viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m-2.715 5.933a.5.5 0 0 1-.183-.683A4.5 4.5 0 0 1 8 9.5a4.5 4.5 0 0 1 3.898 2.25.5.5 0 0 1-.866.5A3.5 3.5 0 0 0 8 10.5a3.5 3.5 0 0 0-3.032 1.75.5.5 0 0 1-.683.183M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8" />
               </svg>
               <div style={{ marginLeft: 5 }}> Non Parteciperò </div>
@@ -241,8 +227,8 @@ export default function Partecipazione() {
         <div className="d-flex justify-content-center mt-3">
           <button className="btn btn-secondary" onClick={() => setResponse(null)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-up" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-up" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z" />
               </svg>
               <div style={{ marginLeft: 5 }}>Ho cambiato idea</div>
             </div>
@@ -256,8 +242,28 @@ export default function Partecipazione() {
     <React.Fragment>
 
       <div className="container my-5">
-        <h2 className="mb-4">Partecipazione</h2>
-        <form onSubmit={handleSubmit} className="d-flex flex-column gap-4" noValidate>
+        <h2  >Partecipazione</h2>
+
+        <div className="ramo_img"></div>
+
+        <div style={{ padding: '10px 20px' }}>
+          <p>
+            Abbiamo pensato ad un piccolo form da compilare per avere un aiutino sul tenere il conto di chi ci sarà.
+            <br />
+            Non lo sai compilare? Non lo vuoi compilare perché ti vuoi fare una bella chiacchierata con noi due e magari, con la scusa, cercare di venderci
+            qualche cialda arancione per la macchinetta del caffè?  <br />(Ti prego, non farlo! Non le vogliamo le tue cialde! Lasciaci in pace!)
+            <br />  <br />
+            A parte gli scherzi, nessun problema tesò!
+            <br />
+            Ci fa sempre piacere farci una chiacchierata, però la ✨laurea in informatica✨ faccela sfruttare in qualche modo.
+            <br />
+            Ci trovi ai numeri:
+            <br />
+            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
+            <div style={{ fontSize: '1.1em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="d-flex flex-column gap-4 p-3 rounded" noValidate style={{ backgroundColor: '#d7e0dd' }}>
           <div className="form-group">
             <label htmlFor="email" className="fw-semibold mb-2">
               Email di riferimento:
@@ -267,117 +273,127 @@ export default function Partecipazione() {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              value={formData?.email || ""}
               onChange={handleChange}
               placeholder="esempio@tuaemail.it"
               className="form-control"
-              required
             />
-          </div>
 
-          <div className="row g-3">
-            <div className="col-md-6">
-              <label htmlFor="partecipanti" className="fw-semibold mb-2">
-                Numero di partecipanti:
-              </label>
-              <input
-                type="number"
-                id="partecipanti"
-                name="partecipanti"
-                min="1"
-                value={formData.partecipanti}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="bambini" className="fw-semibold mb-2">
-                Numero di bambini (0-12 anni):
-              </label>
-              <input
-                type="number"
-                id="bambini"
-                name="bambini"
-                min="0"
-                value={formData.bambini}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
           </div>
 
           {/* Persone */}
           {formData.persone.map((p, i) => (
-            <div
-              key={i}
-              className="border rounded p-3 mb-3"
-              style={{ backgroundColor: "#f4f4f4" }}
-            >
-              <h6 className="mb-3">
-                {i < formData.partecipanti
-                  ? `Partecipante ${i + 1}`
-                  : `Bambino ${i + 1 - formData.partecipanti}`}
-              </h6>
+            <React.Fragment>
+              <svg style={{ transform: ' rotate(180deg)' }} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 70"><g fill="#f4f4f4"><rect fill="#d7e0dd" width="100%" height="70%" /><path d="M0 0v60c9 0 18-3 25-10 13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s37 13 50 0c14-14 37-14 50 0 7 7 16 10 25 10V0H0Z"></path></g></svg>
+              <div key={i} className=" rounded p-3 " style={{ backgroundColor: "#f4f4f4", position: "relative", marginTop: -30, marginBottom: -30 }}>
+                <h6 className="mb-3">
+                  Partecipante {i + 1}
 
-              <div className="mb-3">
-                <label className="fw-semibold mb-1" htmlFor={`nome-${i}`}>
-                  Nome:
-                </label>
-                <div style={{ fontSize: 14, marginBottom: 5 }}>Inserisci il nome e il cognome di almeno uno dei partecipanti! </div>
-                <input
-                  id={`nome-${i}`}
-                  type="text"
-                  value={p.nome}
-                  onChange={(e) => handlePersonChange(i, "nome", e.target.value)}
-                  className="form-control"
-                  required
-                />
-              </div>
+                  {/* Bottone rimuovi */}
+                  {formData.persone.length > 1 && ( // assicuriamoci che ci sia sempre almeno un partecipante
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          partecipanti: prev.partecipanti - 1,
+                          persone: prev.persone.filter((_, index) => index !== i)
+                        }));
+                      }}
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "10px",
+                        border: "none",
+                        background: "transparent",
+                        cursor: "pointer",
+                        color: "red",
+                        fontSize: "1.2rem"
+                      }}
+                      title="Rimuovi partecipante"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="000" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                      </svg>
+                    </button>
+                  )}
+                </h6>
 
-              <div className="mb-3">
-                <label className="fw-semibold mb-1" htmlFor={`preferenza-${i}`}>
-                  Preferenze alimentari:
-                </label>
-                <select
-                  id={`preferenza-${i}`}
-                  value={p.preferenza}
-                  onChange={(e) =>
-                    handlePersonChange(i, "preferenza", e.target.value)
-                  }
-                  className="form-select w-100"
-                  required
-                >
-                  {menuOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {p.preferenza === "Allergie alimentari (specificare quali)" && (
-                <div>
-                  <label className="fw-semibold mb-1" htmlFor={`allergie-${i}`}>
-                    Allergie o altre richieste particolari:
-                  </label>
-                  <textarea
-                    id={`allergie-${i}`}
-                    value={p.allergie}
-                    onChange={(e) =>
-                      handlePersonChange(i, "allergie", e.target.value)
-                    }
-                    className="form-control w-100"
-                    rows={2}
-                    placeholder="Es. glutine, lattosio, ecc."
+                <div className="mb-3">
+                  <label className="fw-semibold mb-1" htmlFor={`nome-${i}`}>Nome:</label>
+                  <input
+                    id={`nome-${i}`}
+                    type="text"
+                    value={p.nome}
+                    onChange={(e) => handlePersonChange(i, "nome", e.target.value)}
+                    className="form-control"
+                    required
                   />
                 </div>
-              )}
-            </div>
+
+                <div className="mb-3">
+                  <label className="fw-semibold mb-1" htmlFor={`tipo-${i}`}>Età partecipante:</label>
+                  <select
+                    id={`tipo-${i}`}
+                    value={p.tipo}
+                    onChange={(e) => handlePersonChange(i, "tipo", e.target.value)}
+                    className="form-select"
+                    required
+                  >
+                    <option value="adulto">Adulto</option>
+                    <option value="bambino">Bambino (0-12 anni)</option>
+                  </select>
+                </div>
+
+                <div className="mb-3">
+                  <label className="fw-semibold mb-1" htmlFor={`preferenza-${i}`}>Preferenze alimentari:</label>
+                  <select
+                    id={`preferenza-${i}`}
+                    value={p.preferenza}
+                    onChange={(e) => handlePersonChange(i, "preferenza", e.target.value)}
+                    className="form-select"
+                    required
+                  >
+                    {menuOptions.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {p.preferenza === "Allergie alimentari (specificare quali)" && (
+                  <div>
+                    <label className="fw-semibold mb-1" htmlFor={`allergie-${i}`}>Allergie o altre richieste particolari:</label>
+                    <textarea
+                      id={`allergie-${i}`}
+                      value={p.allergie}
+                      onChange={(e) => handlePersonChange(i, "allergie", e.target.value)}
+                      className="form-control w-100"
+                      rows={2}
+                      placeholder="Es. glutine, lattosio, ecc."
+                    />
+                  </div>
+                )}
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 70"><g fill="#f4f4f4"><rect fill="#d7e0dd" width="100%" height="70%" /><path d="M0 0v60c9 0 18-3 25-10 13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s36 14 50 0c13-14 36-14 50 0s37 13 50 0c14-14 37-14 50 0 7 7 16 10 25 10V0H0Z"></path></g></svg>
+            </React.Fragment>
           ))}
 
+          <div className="  mb-3">
+            <button
+              type="button"
+              className="buttons copia-iban"
+              style={{ border: 0, backgroundColor: '#fafafa' }}
+              onClick={() => {
+                setFormData(prev => ({
+                  ...prev,
+                  partecipanti: prev.partecipanti + 1,
+                  persone: [...prev.persone, { nome: "", tipo: "adulto", preferenza: "Nessuna", allergie: "" }]
+                }));
+              }}
+            >
+              Aggiungi partecipante
+            </button>
+          </div>
           {/* Note aggiuntive */}
           <div className="form-group">
             <label htmlFor="note" className="fw-semibold mb-2">
@@ -434,15 +450,15 @@ export default function Partecipazione() {
             <br />
             Ci trovi ai numeri:
             <br />
-            <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
-            <p style={{ fontSize: '1.3em' }}> <strong>Federico</strong> +39 373 743 11 23</p>
+            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
+            <div style={{ fontSize: '1.1em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
           </p>
           <br />
           <div className="d-flex justify-content-center mt-3">
             <button className="btn btn-secondary" onClick={() => setResponse(null)}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-up" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-up" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z" />
                 </svg>
                 <div style={{ marginLeft: 5 }}>Ho cambiato idea</div>
               </div>

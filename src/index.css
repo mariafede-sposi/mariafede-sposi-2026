@@ -43,7 +43,7 @@ html {
 body {
   color: var(--colore-testo);
   font-family: 'Fraunces';
-  background-color: #f4f4f4;
+  background-color: #2d392c;
 
 }
 
@@ -181,4 +181,16 @@ section {
   margin-left: calc(-50vw + 50%);
   /* resetta i margini di un container */
   background-color: #9b7f71;
+}
+
+.ramo_img {
+  background-image: url('./imgs/ramo.png');
+  height: 60px;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* centra l'immagine orizzontalmente e verticalmente */
+  transform: rotate(170deg);
+  /* usa transform invece di rotate per compatibilità */
 }

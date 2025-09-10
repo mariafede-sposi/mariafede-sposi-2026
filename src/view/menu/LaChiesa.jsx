@@ -8,7 +8,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
             <div className="col-12 ">
                 {/* Descrizione */}
                 <h2>La Celebrazione</h2>
-                <hr style={{ width: '300px', placeSelf: 'center' }} />
+                <div className="ramo_img"></div>
                 <h3>Chiesa di Santa Maria Assunta </h3>
                 <h3 style={{ marginTop: '-10px' }}> Ariccia (RM)</h3>
                 <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
@@ -21,7 +21,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
                             </svg>
                             <div style={{ marginLeft: 5 }}>La chiesa</div>
@@ -98,7 +98,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                 >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                             <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
                         </svg>
                         <div style={{ marginLeft: 5 }}>Parcheggio Bernini</div>
