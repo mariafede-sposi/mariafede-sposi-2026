@@ -4,19 +4,20 @@ import cors from 'cors';
 import nodemailer from 'nodemailer';
 import pkg from 'pg';
 import validator from 'validator';
+import rateLimit from 'express-rate-limit';
 
 const { Pool } = pkg;
 const app = express();
 
 // -------------------- Config variabili --------------------
-const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0;
+const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0; // timeout in ms
+const TOKEN_PASSKEY = process.env.TOKEN_PASSKEY;
 
 // -------------------- CORS --------------------
 const allowedOrigin = [
   'https://mariafede-sposi.github.io',
   'https://www.mariafedesposi2026.it',
-  'http://localhost:5173',
-  'https://uptimerobot.com'
+  'http://localhost:5173'
 ];
 
 app.use(cors({
@@ -38,6 +39,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+// Imposto statement_timeout lato DB
 pool.on('connect', (client) => {
   client.query(`SET statement_timeout = ${TIMEOUT_MS}`);
 });
@@ -52,33 +54,54 @@ async function withTimeout(fn, ms = TIMEOUT_MS, label = "Operazione") {
   ]);
 }
 
-// -------------------- Middleware Token --------------------
+// -------------------- Rate Limit --------------------
+const submitLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minuto
+  max: 3, // max 3 richieste per IP al minuto
+  message: { error: 'Hai inviato troppe richieste. Riprova più tardi.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// -------------------- Middleware per TOKEN --------------------
 function checkToken(req, res, next) {
-  if (req.headers['x-api-token'] !== process.env.TOKEN_PASSKEY) {
-    return res.status(403).send('Forbidden: token mancante o non valido');
+  const token = req.headers['x-access-token'];
+  if (!token || token !== TOKEN_PASSKEY) {
+    return res.status(403).json({ error: 'Accesso negato: token mancante o invalido' });
   }
   next();
 }
 
-// -------------------- Endpoint KeepAlive --------------------
-app.get('/keepalive', (req, res) => {
-  res.status(200).send('OK - KeepAlive attivo');
-});
+// -------------------- Funzioni --------------------
 
-// -------------------- Funzioni principali --------------------
+// Sanitizzazione input
+function sanitizeInput(input) {
+  if (typeof input === 'string') {
+    return validator.escape(input.trim());
+  }
+  if (typeof input === 'number') {
+    return input;
+  }
+  return input;
+}
+
+// Salvataggio partecipazione con transaction
 async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, note }, errori) {
   return withTimeout(async () => {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
 
+      const cleanEmail = email ? validator.normalizeEmail(email) : null;
+      const cleanNote = sanitizeInput(note || 'Nessuna');
+
       const res = await client.query(
         `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
-        [email || (persone?.[0]?.nome.replace(/\s+/g, '').toUpperCase() || 'ANONIMO')]
+        [cleanEmail || persone?.[0]?.nome.replace(/\s+/g, '').toUpperCase()]
       );
 
       let indirizzoEmailId;
-      const nomePrimoPartecipante = persone?.[0]?.nome || 'Anonimo';
+      const nomePrimoPartecipante = sanitizeInput(persone?.[0]?.nome || 'Sconosciuto');
 
       if (res.rows.length > 0) {
         indirizzoEmailId = res.rows[0].id;
@@ -88,11 +111,11 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
            VALUES ($1, $2, $3, $4, $5)
            RETURNING id`,
           [
-            email || nomePrimoPartecipante.replace(/\s+/g, '').toUpperCase(),
+            cleanEmail || nomePrimoPartecipante.replace(/\s+/g, '').toUpperCase(),
             nomePrimoPartecipante,
             partecipanti,
             bambini || 0,
-            note || 'Nessuna'
+            cleanNote
           ]
         );
         indirizzoEmailId = insertRes.rows[0].id;
@@ -106,9 +129,9 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
           const idx = index * 4;
           placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4})`);
           values.push(
-            p.nome || 'Anonimo',
-            p.preferenza || 'Nessuna',
-            p.allergie || 'Nessuna allergia indicata',
+            sanitizeInput(p.nome),
+            sanitizeInput(p.preferenza || 'Nessuna'),
+            sanitizeInput(p.allergie || 'Nessuna allergia indicata'),
             indirizzoEmailId
           );
         });
@@ -131,6 +154,7 @@ async function salvaPartecipazioneDB({ email, partecipanti, bambini, persone, no
   }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
 
+// Invio email di conferma
 async function inviaEmail({ email, partecipanti, bambini, persone, note }, errori) {
   return withTimeout(async () => {
     if (!email) return;
@@ -144,27 +168,19 @@ async function inviaEmail({ email, partecipanti, bambini, persone, note }, error
         },
       });
 
-      const emailSafe = validator.normalizeEmail(email);
-      const noteSafe = note ? validator.escape(note) : 'Nessuna';
-      const personeSafe = persone.map(p => ({
-        nome: p.nome ? validator.escape(p.nome) : 'Anonimo',
-        preferenza: p.preferenza ? validator.escape(p.preferenza) : 'Nessuna',
-        allergie: p.allergie ? validator.escape(p.allergie) : 'Nessuna allergia indicata'
-      }));
-
       const corpo_mail = `
 Nuova conferma di partecipazione:
-- Email: ${emailSafe}
+- Email: ${email}
 - Adulti: ${partecipanti}
 - Bambini: ${bambini || 0}
 - Partecipanti:
-${personeSafe.map(p => `    -- ${p.nome} - ${p.preferenza} - ${p.allergie}`).join('\n')}
-- Note: ${noteSafe}
+${persone.map(p => `    -- ${p.nome} - ${p.preferenza} - ${p.allergie || 'Nessuna allergia indicata'}`).join('\n')}
+- Note: ${note || 'Nessuna'}
       `;
 
       await transporter.sendMail({
         from: process.env.EMAIL_FROM,
-        to: emailSafe,
+        to: email,
         subject: 'Nuova conferma di partecipazione',
         text: corpo_mail,
       });
@@ -175,10 +191,10 @@ ${personeSafe.map(p => `    -- ${p.nome} - ${p.preferenza} - ${p.allergie}`).joi
   }, TIMEOUT_MS, "inviaEmail");
 }
 
+// Invio email di alert in caso di errori
 async function inviaMailErrore(payload, errori) {
   return withTimeout(async () => {
     if (errori.length === 0) return;
-
     try {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -188,21 +204,13 @@ async function inviaMailErrore(payload, errori) {
         },
       });
 
-      const payloadSafe = JSON.stringify(payload, (key, value) => {
-        if (typeof value === 'string') return validator.escape(value);
-        if (Array.isArray(value)) return value.map(v => (typeof v === 'string' ? validator.escape(v) : v));
-        return value;
-      }, 2);
-
       let logTesto = '';
       errori.forEach(e => {
-        const metodoSafe = validator.escape(e.metodo || 'sconosciuto');
-        const logSafe = validator.escape(e.log || 'nessun log');
-        logTesto += `Metodo: ${metodoSafe}\nErrore: ${logSafe}\n\n`;
+        logTesto += `Metodo: ${e.metodo}\nErrore: ${e.log}\n\n`;
       });
 
       const testo = `
-Payload che ha causato l'errore: ${payloadSafe}
+Payload che ha causato l'errore: ${JSON.stringify(payload, null, 2)}
 
 Errori riscontrati:
 ${logTesto}
@@ -220,39 +228,32 @@ ${logTesto}
   }, TIMEOUT_MS, "inviaMailErrore");
 }
 
-// -------------------- Endpoint principale con TOKEN_PASSKEY --------------------
-app.post('/salvataggioADBedInvioEmail', checkToken, async (req, res) => {
-  const { email, partecipanti, bambini, persone, note } = req.body;
-  const erroriValidazione = [];
+// -------------------- Endpoint --------------------
+app.get('/keepalive', (req, res) => {
+  res.status(200).send('OK');
+});
 
-  if (!Number.isInteger(partecipanti) || partecipanti < 1) erroriValidazione.push('Numero partecipanti non valido');
-  if (bambini !== undefined && (!Number.isInteger(bambini) || bambini < 0)) erroriValidazione.push('Numero bambini non valido');
+app.post('/salvataggioADBedInvioEmail', checkToken, submitLimiter, async (req, res) => {
+  let { email, partecipanti, bambini, persone, note } = req.body;
 
-  let emailSanitized = null;
-  if (email) {
-    if (!validator.isEmail(email)) erroriValidazione.push('Email non valida');
-    else emailSanitized = validator.normalizeEmail(email);
-  }
-
-  const noteSanitized = note ? validator.escape(note) : 'Nessuna';
-  const personeSanitized = Array.isArray(persone) ? persone.map(p => ({
-    nome: p.nome ? validator.escape(p.nome) : 'Anonimo',
-    preferenza: p.preferenza ? validator.escape(p.preferenza) : 'Nessuna',
-    allergie: p.allergie ? validator.escape(p.allergie) : 'Nessuna allergia indicata'
+  // Sanitizzo e valido
+  email = email && validator.isEmail(email) ? validator.normalizeEmail(email) : null;
+  partecipanti = parseInt(partecipanti) || 0;
+  bambini = parseInt(bambini) || 0;
+  note = sanitizeInput(note || 'Nessuna');
+  persone = Array.isArray(persone) ? persone.map(p => ({
+    nome: sanitizeInput(p.nome || ''),
+    preferenza: sanitizeInput(p.preferenza || 'Nessuna'),
+    allergie: sanitizeInput(p.allergie || '')
   })) : [];
 
-  if (erroriValidazione.length > 0) return res.status(400).json({ error: erroriValidazione });
+  if (!partecipanti || partecipanti < 1) return res.status(400).send('Numero partecipanti non valido');
+  if (email && !validator.isEmail(email)) return res.status(400).send('Email non valida');
 
   res.status(200).send('Richiesta ricevuta, elaborazione in corso');
 
   const errori = [];
-  const payload = {
-    email: emailSanitized,
-    partecipanti,
-    bambini: bambini || 0,
-    persone: personeSanitized,
-    note: noteSanitized
-  };
+  const payload = { email, partecipanti, bambini, persone, note };
 
   try {
     await salvaPartecipazioneDB(payload, errori);
