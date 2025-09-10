@@ -104,6 +104,7 @@ async function salvaPartecipazioneDB(payload, errori) {
     try {
       await client.query('BEGIN');
 
+      // Controllo se l'email esiste già
       const res = await client.query(
         `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
         [payload.email || (payload.persone[0]?.nome || "").replace(/\s+/g, '').toUpperCase()]
@@ -114,7 +115,24 @@ async function salvaPartecipazioneDB(payload, errori) {
 
       if (res.rows.length > 0) {
         indirizzoEmailId = res.rows[0].id;
+
+        // Somma Partecipanti e Bambini e concatena le note
+        await client.query(
+          `UPDATE Indirizzi_Email
+           SET Note = CONCAT_WS(' | ', Note, $1),
+               Partecipanti = Partecipanti + $2,
+               Bambini = Bambini + $3
+           WHERE Id = $4`,
+          [
+            payload.note || '',
+            payload.partecipanti,
+            payload.bambini || 0,
+            indirizzoEmailId
+          ]
+        );
+
       } else {
+        // Inserimento nuovo record
         const insertRes = await client.query(
           `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Partecipanti, Bambini, Note)
            VALUES ($1, $2, $3, $4, $5)
@@ -130,6 +148,7 @@ async function salvaPartecipazioneDB(payload, errori) {
         indirizzoEmailId = insertRes.rows[0].id;
       }
 
+      // Inserimento partecipanti
       if (payload.persone && payload.persone.length > 0) {
         const values = [];
         const placeholders = [];
@@ -142,7 +161,7 @@ async function salvaPartecipazioneDB(payload, errori) {
             p.preferenza,
             p.allergie,
             indirizzoEmailId,
-            p.tipo.toLowerCase() === "bambino" // 👈 boolean true/false
+            p.tipo.toLowerCase() === "bambino" // true/false
           );
         });
 
@@ -154,6 +173,7 @@ async function salvaPartecipazioneDB(payload, errori) {
       }
 
       await client.query('COMMIT');
+
     } catch (err) {
       await client.query('ROLLBACK');
       errori.push({ metodo: 'salvaPartecipazioneDB', log: err.toString() });
@@ -163,6 +183,7 @@ async function salvaPartecipazioneDB(payload, errori) {
     }
   }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
+
 
 async function inviaEmail(payload, errori) {
   return withTimeout(async () => {
