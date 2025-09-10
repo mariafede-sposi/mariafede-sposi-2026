@@ -76,17 +76,23 @@ async function withTimeout(fn, ms = TIMEOUT_MS, label = "Operazione") {
 function sanitizePartecipante(p) {
   return {
     nome: validator.escape(p.nome || ""),
+    tipo: validator.escape(p.tipo || "adulto"),
     preferenza: validator.escape(p.preferenza || "Nessuna"),
     allergie: validator.escape(p.allergie || "Nessuna allergia indicata")
   };
 }
 
 function sanitizePayload(payload) {
+  const persone = (payload.persone || []).map(sanitizePartecipante);
+
+  // Conta i bambini in base al campo "tipo"
+  const bambini = persone.filter(p => p.tipo.toLowerCase() === "bambino").length;
+
   return {
     email: payload.email ? validator.normalizeEmail(payload.email) : "",
     partecipanti: Number(payload.partecipanti) || 0,
-    bambini: Number(payload.bambini) || 0,
-    persone: (payload.persone || []).map(sanitizePartecipante),
+    bambini,
+    persone,
     note: validator.escape(payload.note || "")
   };
 }
@@ -110,7 +116,7 @@ async function salvaPartecipazioneDB(payload, errori) {
         indirizzoEmailId = res.rows[0].id;
       } else {
         const insertRes = await client.query(
-          `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Adulti, Bambini, Note)
+          `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Partecipanti, Bambini, Note)
            VALUES ($1, $2, $3, $4, $5)
            RETURNING id`,
           [
@@ -129,18 +135,19 @@ async function salvaPartecipazioneDB(payload, errori) {
         const placeholders = [];
 
         payload.persone.forEach((p, index) => {
-          const idx = index * 4;
-          placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4})`);
+          const idx = index * 5;
+          placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4}, $${idx + 5})`);
           values.push(
             p.nome,
             p.preferenza,
             p.allergie,
-            indirizzoEmailId
+            indirizzoEmailId,
+            p.tipo.toLowerCase() === "bambino" // 👈 boolean true/false
           );
         });
 
         await client.query(
-          `INSERT INTO Partecipanti (Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId)
+          `INSERT INTO Partecipanti (Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId, Bambino)
            VALUES ${placeholders.join(', ')}`,
           values
         );
@@ -172,10 +179,10 @@ async function inviaEmail(payload, errori) {
       const corpo_mail = `
 Nuova conferma di partecipazione:
 - Email: ${payload.email}
-- Adulti: ${payload.partecipanti}
+- Partecipanti: ${payload.partecipanti}
 - Bambini: ${payload.bambini || 0}
-- Partecipanti:
-${payload.persone.map(p => `    -- ${p.nome} - ${p.preferenza} - ${p.allergie}`).join('\n')}
+- Partecipanti dettagliati:
+${payload.persone.map(p => `    -- ${p.nome} (${p.tipo}) - ${p.preferenza} - ${p.allergie}`).join('\n')}
 - Note: ${payload.note || 'Nessuna'}
       `;
 
