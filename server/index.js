@@ -9,6 +9,8 @@ const { Pool } = pkg;
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // -------------------- Config variabili --------------------
 const TIMEOUT_MS = parseInt(process.env.DATABASE_TIMEOUT_MS) || 0;
 
