@@ -5,37 +5,6 @@ import nodemailer from 'nodemailer';
 import pkg from 'pg';
 import rateLimit from 'express-rate-limit';
 import validator from 'validator';
-
-import net from "net";
-
-const testSMTP = (host, port) => {
-  return new Promise((resolve, reject) => {
-    const socket = net.createConnection(port, host);
-    socket.setTimeout(5000);
-    socket.on("connect", () => {
-      console.log(`✅ Connessione riuscita a ${host}:${port}`);
-      socket.end();
-      resolve();
-    });
-    socket.on("timeout", () => {
-      console.error(`❌ Timeout verso ${host}:${port}`);
-      socket.destroy();
-      reject();
-    });
-    socket.on("error", (err) => {
-      console.error(`❌ Errore verso ${host}:${port}`, err.message);
-      reject();
-    });
-  });
-};
-
-// Prova entrambe le porte
-testSMTP("smtp.gmail.com", 465);
-testSMTP("smtp.gmail.com", 587);
-
-
-
-
 const { Pool } = pkg;
 
 const app = express();
@@ -117,8 +86,6 @@ function sanitizePartecipante(p) {
 
 function sanitizePayload(payload) {
   const persone = (payload.persone || []).map(sanitizePartecipante);
-
-  // Conta i bambini in base al campo "tipo"
   const bambini = persone.filter(p => p.tipo.toLowerCase() === "bambino").length;
 
   return {
@@ -137,7 +104,6 @@ async function salvaPartecipazioneDB(payload, errori) {
     try {
       await client.query('BEGIN');
 
-      // Controllo se l'email esiste già
       const res = await client.query(
         `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
         [payload.email || (payload.persone[0]?.nome || "").replace(/\s+/g, '').toUpperCase()]
@@ -149,24 +115,21 @@ async function salvaPartecipazioneDB(payload, errori) {
       if (res.rows.length > 0) {
         indirizzoEmailId = res.rows[0].id;
 
-        // Somma Partecipanti e Bambini e concatena le note
         await client.query(
           `UPDATE Indirizzi_Email
-          SET Note = CONCAT_WS(' | ', Note, $1::text),
-            Partecipanti = Partecipanti + $2,
-            Bambini = Bambini + $3
-          WHERE Id = $4`,
+           SET Note = CONCAT_WS(' | ', Note, $1::text),
+               Partecipanti = Partecipanti + $2,
+               Bambini = Bambini + $3
+           WHERE Id = $4`,
           [
-            payload.note || '', // se vuota rimane '', ma ora PostgreSQL sa che è TEXT
+            payload.note || '',
             payload.partecipanti,
             payload.bambini || 0,
             indirizzoEmailId
           ]
         );
 
-
       } else {
-        // Inserimento nuovo record
         const insertRes = await client.query(
           `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Partecipanti, Bambini, Note)
            VALUES ($1, $2, $3, $4, $5)
@@ -182,7 +145,6 @@ async function salvaPartecipazioneDB(payload, errori) {
         indirizzoEmailId = insertRes.rows[0].id;
       }
 
-      // Inserimento partecipanti
       if (payload.persone && payload.persone.length > 0) {
         const values = [];
         const placeholders = [];
@@ -195,7 +157,7 @@ async function salvaPartecipazioneDB(payload, errori) {
             p.preferenza,
             p.allergie,
             indirizzoEmailId,
-            p.tipo.toLowerCase() === "bambino" // true/false
+            p.tipo.toLowerCase() === "bambino"
           );
         });
 
@@ -218,13 +180,14 @@ async function salvaPartecipazioneDB(payload, errori) {
   }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
 
-
 async function inviaEmail(payload, errori) {
   return withTimeout(async () => {
     if (!payload.email) return;
     try {
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT),
+        secure: false, // STARTTLS
         auth: {
           user: process.env.EMAIL_FROM,
           pass: process.env.EMAIL_PASS,
@@ -247,6 +210,7 @@ ${payload.persone.map(p => `    -- ${p.nome} (${p.tipo}) - ${p.preferenza} - ${p
         subject: 'Nuova conferma di partecipazione',
         text: corpo_mail,
       });
+
     } catch (err) {
       errori.push({ metodo: 'inviaEmail', log: err.toString() });
       console.error('Errore inviaEmail:', err);
@@ -259,7 +223,9 @@ async function inviaMailErrore(payload, errori) {
     if (errori.length === 0) return;
     try {
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT),
+        secure: false,
         auth: {
           user: process.env.EMAIL_FROM,
           pass: process.env.EMAIL_PASS,
@@ -282,6 +248,7 @@ ${logTesto}
         subject: 'Errore durante salvataggio/invio email',
         text: testo,
       });
+
     } catch (err) {
       console.error('Errore invio mail di alert:', err);
     }
