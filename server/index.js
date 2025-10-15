@@ -5,6 +5,37 @@ import nodemailer from 'nodemailer';
 import pkg from 'pg';
 import rateLimit from 'express-rate-limit';
 import validator from 'validator';
+
+import net from "net";
+
+const testSMTP = (host, port) => {
+  return new Promise((resolve, reject) => {
+    const socket = net.createConnection(port, host);
+    socket.setTimeout(5000);
+    socket.on("connect", () => {
+      console.log(`✅ Connessione riuscita a ${host}:${port}`);
+      socket.end();
+      resolve();
+    });
+    socket.on("timeout", () => {
+      console.error(`❌ Timeout verso ${host}:${port}`);
+      socket.destroy();
+      reject();
+    });
+    socket.on("error", (err) => {
+      console.error(`❌ Errore verso ${host}:${port}`, err.message);
+      reject();
+    });
+  });
+};
+
+// Prova entrambe le porte
+testSMTP("smtp.gmail.com", 465);
+testSMTP("smtp.gmail.com", 587);
+
+
+
+
 const { Pool } = pkg;
 
 const app = express();
