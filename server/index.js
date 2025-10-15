@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import nodemailer from 'nodemailer';
 import pkg from 'pg';
 import rateLimit from 'express-rate-limit';
 import validator from 'validator';
+import fetch from 'node-fetch'; // per chiamare l'API REST di Brevo
 const { Pool } = pkg;
 
 const app = express();
@@ -180,36 +180,36 @@ async function salvaPartecipazioneDB(payload, errori) {
   }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
 
+// -------------------- Invia Email tramite API REST Brevo --------------------
 async function inviaEmail(payload, errori) {
   return withTimeout(async () => {
     if (!payload.email) return;
-    try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT),
-        secure: false, // STARTTLS
-        auth: {
-          user: process.env.EMAIL_FROM,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
 
-      const corpo_mail = `
-Nuova conferma di partecipazione:
+    try {
+      const body = {
+        sender: { email: process.env.EMAIL_FROM },
+        to: [{ email: payload.email }],
+        subject: 'Nuova conferma di partecipazione',
+        textContent: `Nuova conferma di partecipazione:
 - Email: ${payload.email}
 - Partecipanti: ${payload.partecipanti}
 - Bambini: ${payload.bambini || 0}
 - Partecipanti dettagliati:
-${payload.persone.map(p => `    -- ${p.nome} (${p.tipo}) - ${p.preferenza} - ${p.allergie}`).join('\n')}
-- Note: ${payload.note || 'Nessuna'}
-      `;
+${payload.persone.map(p => `-- ${p.nome} (${p.tipo}) - ${p.preferenza} - ${p.allergie}`).join('\n')}
+- Note: ${payload.note || 'Nessuna'}`
+      };
 
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: payload.email,
-        subject: 'Nuova conferma di partecipazione',
-        text: corpo_mail,
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+          'api-key': process.env.EMAIL_PASS
+        },
+        body: JSON.stringify(body)
       });
+
+      if (!res.ok) throw new Error(`Brevo API error: ${res.status} ${res.statusText}`);
 
     } catch (err) {
       errori.push({ metodo: 'inviaEmail', log: err.toString() });
@@ -221,33 +221,29 @@ ${payload.persone.map(p => `    -- ${p.nome} (${p.tipo}) - ${p.preferenza} - ${p
 async function inviaMailErrore(payload, errori) {
   return withTimeout(async () => {
     if (errori.length === 0) return;
+
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT),
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_FROM,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
-
-      let logTesto = '';
-      errori.forEach(e => logTesto += `Metodo: ${e.metodo}\nErrore: ${e.log}\n\n`);
-
-      const testo = `
-Payload che ha causato l'errore: ${JSON.stringify(payload, null, 2)}
+      const body = {
+        sender: { email: process.env.EMAIL_FROM },
+        to: [{ email: process.env.EMAIL_FROM }],
+        subject: 'Errore durante salvataggio/invio email',
+        textContent: `Payload che ha causato l'errore: ${JSON.stringify(payload, null, 2)}
 
 Errori riscontrati:
-${logTesto}
-      `;
+${errori.map(e => `Metodo: ${e.metodo}\nErrore: ${e.log}`).join('\n\n')}`
+      };
 
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: process.env.EMAIL_FROM,
-        subject: 'Errore durante salvataggio/invio email',
-        text: testo,
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+          'api-key': process.env.EMAIL_PASS
+        },
+        body: JSON.stringify(body)
       });
+
+      if (!res.ok) throw new Error(`Brevo API error: ${res.status} ${res.statusText}`);
 
     } catch (err) {
       console.error('Errore invio mail di alert:', err);
