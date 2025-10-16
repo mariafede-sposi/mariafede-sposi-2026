@@ -20,27 +20,30 @@ async function salvaPartecipazioneDB(payload, errori) {
             let indirizzoEmailId;
             const nomePrimo = payload.persone?.[0]?.nome || null;
 
+            // Tronco la nota a massimo 500 caratteri
+            const noteTruncate = (payload.note || '').substring(0, 500);
+
             if (res.rows.length > 0) {
                 indirizzoEmailId = res.rows[0].id;
                 await client.query(
                     `UPDATE Indirizzi_Email
-           SET Note = CONCAT_WS(' | ', Note, $1::text),
-               Partecipanti = Partecipanti + $2,
-               Bambini = Bambini + $3
-           WHERE Id = $4`,
-                    [payload.note || '', payload.partecipanti, payload.bambini || 0, indirizzoEmailId]
+                     SET Note = CONCAT_WS(' | ', Note, $1::text),
+                         Partecipanti = Partecipanti + $2,
+                         Bambini = Bambini + $3
+                     WHERE Id = $4`,
+                    [noteTruncate, payload.partecipanti, payload.bambini || 0, indirizzoEmailId]
                 );
             } else {
                 const insertRes = await client.query(
                     `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Partecipanti, Bambini, Note)
-           VALUES ($1, $2, $3, $4, $5)
-           RETURNING id`,
+                     VALUES ($1, $2, $3, $4, $5)
+                     RETURNING id`,
                     [
                         payload.email || nomePrimo.replace(/\s+/g, '').toUpperCase(),
                         nomePrimo,
                         payload.partecipanti,
                         payload.bambini || 0,
-                        payload.note
+                        noteTruncate
                     ]
                 );
                 indirizzoEmailId = insertRes.rows[0].id;
@@ -64,7 +67,7 @@ async function salvaPartecipazioneDB(payload, errori) {
 
                 await client.query(
                     `INSERT INTO Partecipanti (Nome, PreferenzeAlimentari, AllergieOAltro, IndirizzoEmailId, Bambino)
-           VALUES ${placeholders.join(', ')}`,
+                     VALUES ${placeholders.join(', ')}`,
                     values
                 );
             }
