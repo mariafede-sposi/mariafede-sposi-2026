@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Conferma di partecipazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        .partecipante {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Conferma di partecipazione</h2>
+        <p>Il <strong>14/02/2026</strong> alle <strong>10:30</strong> presso la <a
+                href="https://maps.app.goo.gl/MTxKZ2Cbjct4fv7D8">
+                Chiesa di Santa Maria Assunta</a>, per poi spostarci presso <a
+                href="https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_">Villa
+                Pocci</a></p>
+        <p><strong>Email:</strong> {email}</p>
+        <p><strong>Partecipanti totali:</strong> {partecipanti}</p>
+        <p><strong>Bambini:</strong> {bambini}</p>
+
+        <h3>Dettaglio partecipanti</h3>
+        <div>{dettagli_partecipanti}</div>
+
+        <p><strong>Note:</strong> {note}</p>
+
+        <div class=" footer">
+            <p>Grazie per aver confermato la tua presenza 💚</p>
+            <p>Maria & Fede</p>
+        </div>
+    </div>
+</body>
+
+</html>

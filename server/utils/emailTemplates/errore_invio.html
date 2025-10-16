@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Errore durante l'invio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #fff3f3;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e57373;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #d32f2f;
+        }
+
+        pre {
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>⚠️ Errore durante il salvataggio o invio email</h2>
+
+        <h3>Payload ricevuto:</h3>
+        <pre>{payload}</pre>
+
+        <h3>Errori riscontrati:</h3>
+        <div>{errori}</div>
+    </div>
+</body>
+
+</html>
