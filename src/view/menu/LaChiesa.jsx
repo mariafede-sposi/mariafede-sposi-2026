@@ -39,11 +39,11 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                         <svg
                             style={{
                                 position: 'absolute',
-                                top: 0,
+                                top: '-1px',
                                 left: 0,
                                 width: "100%",
                                 height: "25px",
-                                transform: "scaleX(-1)"  // <-- specchiato orizzontalmente
+                                transform: "scaleX(-1)"
                             }}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 1000 50"
@@ -61,7 +61,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                             style={{
                                 transform: 'rotate(180deg)',
                                 position: 'absolute',
-                                bottom: 0,
+                                bottom: '-1px',
                                 left: 0,
                                 width: "100%",
                                 height: "25px",
@@ -108,20 +108,7 @@ export default function LaChiesa({ show, handleShow, handleClose }) {
                 </div>
             </div>
             <svg style={{ transform: "scaleX(-1)" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><g fill="#D7E0DD"><path d="M0 0v99.7C62 69 122.4 48.7 205 66c83.8 17.6 160.5 20.4 240-12 54-22 110-26 173-10a392.2 392.2 0 0 0 222-5c55-17 110.3-36.9 160-27.2V0H0Z" opacity=".5"></path><path d="M0 0v74.7C62 44 122.4 28.7 205 46c83.8 17.6 160.5 25.4 240-7 54-22 110-21 173-5 76.5 19.4 146.5 23.3 222 0 55-17 110.3-31.9 160-22.2V0H0Z"></path></g></svg>
-            {/* Mappa 
-                <div className="col-12 col-md-6 mb-3 mb-md-0">
-                    <iframe
-                        title="Location Ricevimento"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.651763563004!2d12.669273315419728!3d41.72120167921565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132584fcb9a83ad1%3A0x66e855e7f7960b57!2sCollegiata%20di%20Santa%20Maria%20Assunta!5e0!3m2!1sit!2sit!4v1691506000000!5m2!1sit!2sit"
-                        width="100%"
-                        height="350"
-                        style={{ border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                    />
-                </div>
-                */}
+
         </div>
 
     )

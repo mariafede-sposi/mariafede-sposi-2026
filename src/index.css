@@ -196,11 +196,16 @@ section {
 }
 
 .slide_imgs {
-  height: 400px;
   width: 400px;
+  height: 400px;
+  /* quadrato fisso */
   background-size: cover;
-  background-repeat: no-repeat;
+  /* riempie il quadrato tagliando bordi se necessario */
   background-position: center;
+  /* centra l’immagine */
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  /* opzionale */
 }
 
 .Toastify__toast-container {

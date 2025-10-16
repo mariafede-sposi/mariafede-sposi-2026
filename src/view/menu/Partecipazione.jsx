@@ -125,7 +125,7 @@ export default function Partecipazione() {
 
       if (!res.ok) throw new Error("Errore durante la richiesta");
 
-      toast.success("Iscrizione inviata con successo!", {
+      toast.success("Partecipazione inviata con successo!", {
         position: "bottom-right",
         autoClose: 3000,
         theme: "colored",
@@ -178,7 +178,7 @@ export default function Partecipazione() {
 
   if (submitted) {
     return (
-      <div>
+      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
 
         <div ref={graziePerLaConferma}>
           <h2>Grazie per la conferma! 🥰​🎉​🎉​</h2>
@@ -221,7 +221,7 @@ export default function Partecipazione() {
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5" />
               </svg>
-              <div style={{ marginLeft: 5 }}>Parteciperò </div>
+              <div style={{ marginLeft: 5 }}>Parteciperò</div>
             </div>
           </button>
           <button className="btn btn-secondary px-4" onClick={() => setResponse("no")}>
@@ -229,7 +229,7 @@ export default function Partecipazione() {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-emoji-frown-fill" viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m-2.715 5.933a.5.5 0 0 1-.183-.683A4.5 4.5 0 0 1 8 9.5a4.5 4.5 0 0 1 3.898 2.25.5.5 0 0 1-.866.5A3.5 3.5 0 0 0 8 10.5a3.5 3.5 0 0 0-3.032 1.75.5.5 0 0 1-.683.183M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8" />
               </svg>
-              <div style={{ marginLeft: 5 }}> Non Parteciperò </div>
+              <div style={{ marginLeft: 5 }}> Non Parteciperò</div>
             </div>
           </button>
         </div>
@@ -300,21 +300,7 @@ export default function Partecipazione() {
           </p>
         </div>
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-4 p-3 rounded" noValidate style={{ backgroundColor: '#d7e0dd' }}>
-          <div className="form-group">
-            <label htmlFor="email" className="fw-semibold mb-2">
-              Email di riferimento:
-            </label>
-            <div style={{ fontSize: 14, marginBottom: 5 }}>Non è un campo obbligatorio, serve per mandarti una mail di conferma!</div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData?.email || ""}
-              onChange={handleChange}
-              placeholder="esempio@tuaemail.it"
-              className="form-control"
-            />
-          </div>
+
 
           {/* Persone */}
           {formData.persone.map((p, i) => (
@@ -356,9 +342,10 @@ export default function Partecipazione() {
 
                 <div className="mb-3">
                   <label className="fw-semibold mb-1" htmlFor={`nome-${i}`}>Nome:</label>
-                  <input
+                  <input maxLength={255}
                     id={`nome-${i}`}
                     type="text"
+                    placeholder="Nome Cognome"
                     value={p.nome}
                     onChange={(e) => handlePersonChange(i, "nome", e.target.value)}
                     className="form-control"
@@ -404,7 +391,7 @@ export default function Partecipazione() {
                       onChange={(e) => handlePersonChange(i, "allergie", e.target.value)}
                       className="form-control w-100"
                       rows={2}
-                      placeholder="Es. glutine, lattosio, ecc."
+                      placeholder="Es. glutine, lattosio, ecc. (massimo 255 caratteri)" maxLength={255}
                     />
                   </div>
                 )}
@@ -447,10 +434,25 @@ export default function Partecipazione() {
               onChange={handleChange}
               className="form-control w-100"
               rows={3}
-              placeholder="Inserisci eventuali note..."
+              placeholder="Inserisci eventuali note... (massimo 500 caratteri)" maxLength={500}
             />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="email" className="fw-semibold mb-2">
+              Email di riferimento:
+            </label>
+            <div style={{ fontSize: 14, marginBottom: 5 }}>Non è un campo obbligatorio, serve per mandarti una mail di conferma!</div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData?.email || ""}
+              onChange={handleChange}
+              placeholder="esempio@tuaemail.it"
+              className="form-control"
+              maxLength={255}
+            />
+          </div>
           {/* Bottone centrato */}
           <div className="d-flex justify-content-center">
             <button
