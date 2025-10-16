@@ -146,17 +146,30 @@ export default function Partecipazione() {
     }
   };
 
-  useEffect(() => {
-    if (submitted) {
-      console.log("hello")
-      toast.success("Iscrizione inviata con successo!");
-    }
-  }, [submitted])
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // invece di inviare subito, apri la modale
+
+    if (formData.email) {
+      const emailValida = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+      if (!emailValida) {
+        toast.error("Inserisci un indirizzo email valido.");
+        setLoading(false);
+        return;
+      }
+    }
+
+    if (formData.partecipanti < 1) {
+      toast.error("Deve esserci almeno un partecipante adulto.");
+      setLoading(false);
+      return;
+    }
+
+    const nomiVuoti = formData.persone.some(p => !p.nome.trim() || !p.tipo || !p.preferenza);
+    if (nomiVuoti) {
+      toast.error("Tutti i campi dei partecipanti (nome, tipo, preferenze) sono obbligatori.");
+      setLoading(false);
+      return;
+    }
     setShowModal(true);
   };
 
@@ -286,13 +299,12 @@ export default function Partecipazione() {
           <p>
             Abbiamo pensato ad un piccolo form da compilare per avere un aiutino sul tenere il conto di chi ci sarà.
             <br />
-            Non lo sai compilare? Non lo vuoi compilare perché ti vuoi fare una bella chiacchierata con noi due e magari, con la scusa, cercare di venderci
-            qualche cialda arancione per la macchinetta del caffè?  <br />(Ti prego, non farlo! Non le vogliamo le tue cialde! Lasciaci in pace!)
-            <br />  <br />
-            A parte gli scherzi, nessun problema tesò!
+            Non lo sai compilare? Non lo vuoi compilare perché ti vuoi fare <br />una bella chiacchierata mentre stai bloccato nel traffico del raccordo?
             <br />
-            Ci fa sempre piacere farci una chiacchierata, però la ✨laurea in informatica✨ faccela sfruttare in qualche modo.
+            Nessun problema tesò!
             <br />
+            Ci fa sempre piacere farci una chiacchierata, però la <br />✨laurea in informatica✨<br /> faccela sfruttare in qualche modo!
+            <br /><br />
             Ci trovi ai numeri:
             <br />
             <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
