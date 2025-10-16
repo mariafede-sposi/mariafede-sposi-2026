@@ -20,14 +20,13 @@ async function salvaPartecipazioneDB(payload, errori) {
             let indirizzoEmailId;
             const nomePrimo = payload.persone?.[0]?.nome || null;
 
-            // Tronco la nota a massimo 500 caratteri
             const noteTruncate = (payload.note || '').substring(0, 500);
 
             if (res.rows.length > 0) {
                 indirizzoEmailId = res.rows[0].id;
                 await client.query(
                     `UPDATE Indirizzi_Email
-                     SET Note = CONCAT_WS(' | ', Note, $1::text),
+                     SET Note = LEFT(CONCAT_WS(' | ', Note, $1::text), 500),
                          Partecipanti = Partecipanti + $2,
                          Bambini = Bambini + $3
                      WHERE Id = $4`,
