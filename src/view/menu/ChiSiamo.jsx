@@ -40,18 +40,13 @@ export default function ChiSiamo() {
                 <div>
                     <div className="ramo_img"></div>
                     <p>
-                        Correva l'anno 2015 quando il destino volle far incontrare Federico e Maria Teresa tra i banchi dell'università.
-                        <br />
-                        Dopo soli 6 anni e una quarantena, hanno capito che quasi quasi c'era qualche piccolo problema di cuore.
-                        <br />
-                        Maria Teresa e Federico si conoscono all'università anche se il loro amore
-                        sboccerà qualche anno dopo. Superati i primi ostacoli di coppia come il
-                        primo viaggio, la prima spesa, la prima dichiarazione dei
-                        redditi e la prima carbonara (la fa meglio Maria Teresa), vanno a
-                        convivere. Rifiutando di capire il palese errore, insistono nell'andare
-                        avanti e nel volersi sposare.<br />
-                        Questo sito è una delle pietre miliari del
-                        loro rapporto e in parte rappresenta ciò che insieme sono capaci di fare.
+                        Tu con chi fai l'amore? e perché?<br />
+                        Questa è la domanda la cui risposta ha spinto Federico e Maria Teresa alla decisione di sposarsi!<br />
+                        Il loro incontro risale al lontano 2015 A.C. (Avanti Covid) dove, durante gli anni dell'università, hanno piantato il seme del loro amore che sboccerà
+                        solo dopo 6 anni ed una pandemia! <br />
+                        Strano ma vero, nel 2021 D.C. (Dopo Covid) decidono di mettersi insieme e da allora non si sono mai più allontanati l'uno dall'altra.<br />
+                        Potrei scrivere un libro sulla loro storia d'amore e su cosa hanno passato insieme, ma ci auguriamo che nei prossimi capitoli voi possiate farne parte
+
                         <p style={{ fontStyle: 'italic', fontSize: 14 }}>
                             (Nessuna Maria Teresa è stata maltrattata per scrivere questo testo.)
                         </p>
