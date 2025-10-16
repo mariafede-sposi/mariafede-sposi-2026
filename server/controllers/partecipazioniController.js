@@ -12,15 +12,19 @@ async function salvaPartecipazioneDB(payload, errori) {
         try {
             await client.query('BEGIN');
 
+            // Tronco email e nome primo partecipante a 255 caratteri
+            const emailTruncate = (payload.email || (payload.persone[0]?.nome || '').replace(/\s+/g, '').toUpperCase()).substring(0, 255);
+            const nomePrimo = (payload.persone?.[0]?.nome || '').substring(0, 255);
+
+            // Tronco Note a 500 caratteri
+            const noteTruncate = (payload.note || '').substring(0, 500);
+
             const res = await client.query(
                 `SELECT id FROM Indirizzi_Email WHERE Email = $1`,
-                [payload.email || (payload.persone[0]?.nome || "").replace(/\s+/g, '').toUpperCase()]
+                [emailTruncate]
             );
 
             let indirizzoEmailId;
-            const nomePrimo = payload.persone?.[0]?.nome || null;
-
-            const noteTruncate = (payload.note || '').substring(0, 500);
 
             if (res.rows.length > 0) {
                 indirizzoEmailId = res.rows[0].id;
@@ -37,13 +41,7 @@ async function salvaPartecipazioneDB(payload, errori) {
                     `INSERT INTO Indirizzi_Email (Email, NomePrimoPartecipante, Partecipanti, Bambini, Note)
                      VALUES ($1, $2, $3, $4, $5)
                      RETURNING id`,
-                    [
-                        payload.email || nomePrimo.replace(/\s+/g, '').toUpperCase(),
-                        nomePrimo,
-                        payload.partecipanti,
-                        payload.bambini || 0,
-                        noteTruncate
-                    ]
+                    [emailTruncate, nomePrimo, payload.partecipanti, payload.bambini || 0, noteTruncate]
                 );
                 indirizzoEmailId = insertRes.rows[0].id;
             }
@@ -55,10 +53,15 @@ async function salvaPartecipazioneDB(payload, errori) {
                 payload.persone.forEach((p, index) => {
                     const idx = index * 5;
                     placeholders.push(`($${idx + 1}, $${idx + 2}, $${idx + 3}, $${idx + 4}, $${idx + 5})`);
+
+                    // Tronco nome e allergie a 255 caratteri
+                    const nomeTruncate = (p.nome || '').substring(0, 255);
+                    const allergieTruncate = (p.allergie || '').substring(0, 255);
+
                     values.push(
-                        p.nome,
+                        nomeTruncate,
                         p.preferenza,
-                        p.allergie,
+                        allergieTruncate,
                         indirizzoEmailId,
                         p.tipo.toLowerCase() === "bambino"
                     );
@@ -81,6 +84,8 @@ async function salvaPartecipazioneDB(payload, errori) {
         }
     }, TIMEOUT_MS, "salvaPartecipazioneDB");
 }
+
+
 
 export async function handlePartecipazione(req, res) {
     const rawPayload = req.body;
