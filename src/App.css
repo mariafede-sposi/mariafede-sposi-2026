@@ -300,6 +300,15 @@ label {
   /* 0.2 = scurisce l'immagine = 80% visibile */
 }
 
+ol.bold-numbers li::marker {
+  font-weight: bold;
+}
+
+ol.dash-numbers li::marker {
+  content: counter(list-item) " · ";
+  font-weight: bold;
+  /* opzionale */
+}
 
 /* Responsività */
 @media (max-width: 1000px) {

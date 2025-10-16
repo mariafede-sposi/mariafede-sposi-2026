@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import { Modal, Button } from "react-bootstrap";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -16,6 +17,8 @@ export default function Partecipazione() {
   const [submitted, setSubmitted] = useState(false);
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [closeAfterToast, setCloseAfterToast] = useState(false);
 
   const graziePerLaConferma = useRef(null);
 
@@ -77,9 +80,9 @@ export default function Partecipazione() {
   };
 
 
-  const handleSubmit = async (e) => {
+  const handleConfirm = async (e) => {
     e.preventDefault();
-    setLoading(true); // 🔹 mostra loader
+    setLoading(true);
 
     if (formData.email) {
       const emailValida = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
@@ -119,23 +122,56 @@ export default function Partecipazione() {
         }),
       });
 
-      setSubmitted(true);
-      scrollToTarget();
-      toast.success("Hai compilato tutto il form! Che top!!");
+
+      if (!res.ok) throw new Error("Errore durante la richiesta");
+
+      toast.success("Iscrizione inviata con successo!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        theme: "colored",
+        onClose: () => {
+          setSubmitted(true);
+
+          setShowModal(false);
+          setTimeout(() => {
+            scrollToTarget();
+          }, 50);
+        },
+      });
     } catch (err) {
       console.error(err);
-      toast.error('Errore durante l’invio, riprova più tardi.');
+      toast.error("Errore durante l’invio, riprova più tardi.");
     } finally {
-      setLoading(false); // 🔹 nascondi loader
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (submitted) {
+      console.log("hello")
+      toast.success("Iscrizione inviata con successo!");
+    }
+  }, [submitted])
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // invece di inviare subito, apri la modale
+    setShowModal(true);
+  };
+
 
 
   const scrollToTarget = () => {
     if (graziePerLaConferma.current) {
-      graziePerLaConferma.current.scrollIntoView({
-        behavior: "smooth", // animazione fluida
-        block: "start"      // posizione verticale (start, center, end)
+      const element = graziePerLaConferma.current;
+      const elementRect = element.getBoundingClientRect();
+      const elementMiddle = elementRect.top + window.scrollY + elementRect.height / 2;
+      const offsetPosition = elementMiddle - window.innerHeight / 2;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
       });
     }
   };
@@ -242,7 +278,7 @@ export default function Partecipazione() {
     <React.Fragment>
 
       <div className="container my-5">
-        <h2  >Partecipazione</h2>
+        <h2>Partecipazione</h2>
 
         <div className="ramo_img"></div>
 
@@ -419,7 +455,7 @@ export default function Partecipazione() {
           <div className="d-flex justify-content-center">
             <button
               type="submit"
-              className="btn btn-primary px-4 w-100 w-md-auto buttons  "
+              className="btn btn-primary px-4 w-100 w-md-auto buttons"
               style={{ maxWidth: "200px" }}
               disabled={loading}
             >
@@ -439,7 +475,44 @@ export default function Partecipazione() {
             </button>
           </div>
         </form>
-
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Conferma partecipazione</Modal.Title>
+          </Modal.Header>
+          <div
+            style={{
+              background: "#f8f9fa",
+              borderBottom: "1px solid #ddd",
+              padding: "10px 15px",
+              position: "sticky",
+              top: 0,
+              zIndex: 2
+            }}
+          >
+            <p style={{ margin: 0 }}><strong>Email:</strong> {formData.email || "—"}</p>
+          </div>
+          <Modal.Body style={{ maxHeight: "60vh", overflowY: "auto" }}>
+            <p><strong>Partecipanti:</strong></p>
+            <ol class="bold-numbers dash-numbers">
+              {formData.persone.map((p, i) => (
+                <li key={i}>
+                  <strong>{p.nome || "Senza nome"}</strong> – {p.tipo};
+                  <br /> preferenza: {p.preferenza}
+                  <br />{p.allergie && <div>Allergie: {p.allergie}</div>}
+                </li>
+              ))}
+            </ol>
+            {formData.note && <p><strong>Note:</strong> {formData.note}</p>}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Modifica
+            </Button>
+            <div className="btn   px-4 w-100 w-md-auto buttons" onClick={handleConfirm} disabled={loading}>
+              {loading ? "Invio in corso..." : "Conferma e invia"}
+            </div>
+          </Modal.Footer>
+        </Modal>
         <section className="mt-5">
           <h3>Qualcosa non va?</h3>
           <p>

@@ -36,7 +36,7 @@ export default function ChiSiamo() {
                 <p>
                     Maria Teresa e Federico si conoscono all'università anche se il loro amore
                     sboccerà qualche anno dopo. Superati i primi ostacoli di coppia come il
-                    primo viaggio insieme, la prima spesa insieme, la prima dichiarazione dei
+                    primo viaggio, la prima spesa, la prima dichiarazione dei
                     redditi e la prima carbonara insieme (la fa meglio Maria Teresa), vanno a
                     convivere e, rifiutando di capire il palese errore, insistono nell'andare
                     avanti e nel volersi sposare. Questo sito è una delle pietre miliari del
