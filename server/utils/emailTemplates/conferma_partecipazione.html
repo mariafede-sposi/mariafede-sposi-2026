@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <title>Conferma di partecipazione</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Fraunces';
             color: #333;
             background-color: #f9f9f9;
             padding: 20px;
@@ -23,7 +24,8 @@
         }
 
         h2 {
-            color: #4CAF50;
+            color: #5a4a42;
+            text-align: center;
         }
 
         .partecipante {
@@ -33,20 +35,25 @@
         .footer {
             margin-top: 20px;
             font-size: 12px;
-            color: #777;
+            color: #5a4a42;
             text-align: center;
+        }
+
+        a link {
+            color: #333 !important;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>Conferma di partecipazione</h2>
-        <p>Il <strong>14/02/2026</strong> alle <strong>10:30</strong> presso la <a
+
+        <h2>✨ Conferma di partecipazione ✨</h2>
+        <p>Ci vediamo il <strong>14/02/2026</strong> alle <strong>10:30</strong> presso la <a style="color: #5a4a42;"
                 href="https://maps.app.goo.gl/MTxKZ2Cbjct4fv7D8">
-                Chiesa di Santa Maria Assunta</a>, per poi spostarci presso <a
+                Chiesa di Santa Maria Assunta</a>, per poi spostarci presso <a style="color: #5a4a42;"
                 href="https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_">Villa
-                Pocci</a></p>
+                Pocci</a> per il pranzo di ricevimento.</p>
         <p><strong>Email:</strong> {email}</p>
         <p><strong>Partecipanti totali:</strong> {partecipanti}</p>
         <p><strong>Bambini:</strong> {bambini}</p>
@@ -56,9 +63,13 @@
 
         <p><strong>Note:</strong> {note}</p>
 
+        <p>Ricorda che per domande, curiosità e lettere d'amore puoi contattarci telefonicamente o via whatsapp ai
+            numeri:</p>
+        <p style="text-align: center;">+39 373 743 11 23 (Federico) <br />
+            +39 339 775 67 35 (Maria Teresa)</p>
         <div class=" footer">
             <p>Grazie per aver confermato la tua presenza 💚</p>
-            <p>Maria & Fede</p>
+            <p>Federico & Maria Teresa</p>
         </div>
     </div>
 </body>
