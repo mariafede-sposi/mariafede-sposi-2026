@@ -37,7 +37,10 @@ app.use('/salvataggioADBedInvioEmail', (req, res, next) => {
 app.post('/salvataggioADBedInvioEmail', handlePartecipazione);
 
 // -------------------- Keepalive --------------------
-app.get('/keepalive', (_, res) => res.send('OK'));
+app.get('/keepalive', (_, res) => {
+  console.log('Keepalive ping at', new Date().toISOString());
+  res.send('OK');
+});
 
 // -------------------- Endpoint debug token --------------------
 app.get('/check-token', (_, res) => res.json({
