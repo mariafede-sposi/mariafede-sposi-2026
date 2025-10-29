@@ -191,40 +191,46 @@ export default function Partecipazione() {
 
   if (submitted) {
     return (
-      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+      <div style={{
+        paddingLeft: 20,
+        paddingRight: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center' // ✅ centra tutto anche su Safari iOS
+      }}>
 
-        <div ref={graziePerLaConferma}>
+        <div ref={graziePerLaConferma} style={{ textAlign: 'center' }}>
           <h2>Grazie per la conferma! 🥰​🎉​🎉​</h2>
           <p>Abbiamo ricevuto la tua risposta.</p>
-          <p>
-            Se tutto è andato a buon fine, riceverai una mail riepilogativa entro qualche minuto!
-          </p>
+          <p>Se tutto è andato a buon fine, riceverai una mail riepilogativa entro qualche minuto!</p>
           <p>Non vediamo l'ora di stare insieme, ti vogliamo bene campione!</p>
         </div>
+
         {/* Bottone reset */}
         <button
           type="button"
           className="buttons copia-iban"
-          style={{ maxWidth: "250px", border: 0, marginBottom: 5 }}
-          onClick={handleReset}
-          disabled={loading}
-        >
-          <div style={{
+          style={{
+            maxWidth: 250,
+            width: '100%',
+            border: 0,
+            marginBottom: 5,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '5px',
-            margin: '20px 0',
-            width: '100%',
-          }} >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-              <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.916.5.5 0 1 1 .908-.418A6 6 0 1 1 8 2v1z" />
-              <path d="M8 1a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 5.293V1.5A.5.5 0 0 1 8 1z" />
-            </svg>
-            <div style={{ marginLeft: 5 }}>Mandaci una nuova richiesta</div>
-          </div>
+            padding: '10px 20px', // aiuta Safari a calcolare correttamente il box
+          }}
+          onClick={handleReset}
+          disabled={loading}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+            <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.916.5.5 0 1 1 .908-.418A6 6 0 1 1 8 2v1z" />
+            <path d="M8 1a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 5.293V1.5A.5.5 0 0 1 8 1z" />
+          </svg>
+          <span style={{ marginLeft: 8 }}>Mandaci una nuova richiesta</span>
         </button>
       </div>
+
     );
   }
 
