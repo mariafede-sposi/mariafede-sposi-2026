@@ -209,7 +209,14 @@ export default function Partecipazione() {
           onClick={handleReset}
           disabled={loading}
         >
-          <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '5px',
+            margin: '20px 0',
+            width: '100%',
+          }} >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
               <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.916.5.5 0 1 1 .908-.418A6 6 0 1 1 8 2v1z" />
               <path d="M8 1a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 5.293V1.5A.5.5 0 0 1 8 1z" />

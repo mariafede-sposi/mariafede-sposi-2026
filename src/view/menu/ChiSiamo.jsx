@@ -47,9 +47,9 @@ export default function ChiSiamo() {
                         Strano ma vero, nel 2021 D.C. (Dopo Covid) decidono di mettersi insieme e da allora non si sono mai più allontanati l'uno dall'altra.<br />
                         Potremmo scrivere un libro sulla loro storia d'amore e su cosa hanno passato insieme, ma ci auguriamo che nei prossimi capitoli voi possiate farne parte.
 
-                        <p style={{ fontStyle: 'italic', fontSize: 14, marginTop: 5 }}>
-                            (Nessuna Maria Teresa è stata maltrattata per scrivere questo testo)
-                        </p>
+                    </p>
+                    <p style={{ fontStyle: 'italic', fontSize: 14, marginTop: 5 }}>
+                        (Nessuna Maria Teresa è stata maltrattata per scrivere questo testo)
                     </p>
                     <a
                         href="https://www.instagram.com/casciolss"
