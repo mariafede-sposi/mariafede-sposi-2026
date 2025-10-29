@@ -17,7 +17,7 @@ export default function App() {
             <div style={{ position: 'relative' }}>
 
               <h1 style={{ marginBottom: -5, color: 'white', textShadow: '1px 1px 6px #000' }}>
-                Maria Teresa & Federico<br />
+                Federico & Maria Teresa<br />
               </h1>
               <hr style={{ width: '300px', placeSelf: 'center', color: 'white' }} />
               <h1 style={{ marginBottom: -5, color: 'white', textShadow: '1px 1px 6px #000' }}>14 Febbraio 2026</h1>

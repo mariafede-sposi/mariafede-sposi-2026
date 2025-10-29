@@ -249,8 +249,8 @@ export default function Partecipazione() {
         <div>
           <div>Puoi anche comunicarcelo telefonicamente o su whatsapp ai numeri:</div>
           <br />
-          <div style={{ fontSize: '1.2em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
           <div style={{ fontSize: '1.2em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
+          <div style={{ fontSize: '1.2em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
         </div>
       </div>
     );
@@ -269,20 +269,32 @@ export default function Partecipazione() {
           <br />
           Ci trovi ai numeri:
         </p>  <br />
-        <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
         <p style={{ fontSize: '1.3em' }}> <strong>Federico</strong> +39 373 743 11 23</p>
-
+        <p style={{ fontSize: '1.3em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</p>
         <br />
         <div className="d-flex justify-content-center mt-3">
-          <button className="btn btn-secondary" onClick={() => setResponse(null)}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-90deg-up" viewBox="0 0 16 16">
-                <path fillRule="evenodd" d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z" />
-              </svg>
-              <div style={{ marginLeft: 5 }}>Ho cambiato idea</div>
-            </div>
+          <button
+            className="btn btn-secondary d-flex align-items-center"
+            onClick={() => setResponse(null)}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-arrow-90deg-up"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.854 1.146a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L4 2.707V12.5A2.5 2.5 0 0 0 6.5 15h8a.5.5 0 0 0 0-1h-8A1.5 1.5 0 0 1 5 12.5V2.707l3.146 3.147a.5.5 0 1 0 .708-.708z"
+              />
+            </svg>
+            <span style={{ marginLeft: 5 }}>Ho cambiato idea</span>
           </button>
         </div>
+
       </div>
     );
   }
@@ -307,8 +319,8 @@ export default function Partecipazione() {
             <br /><br />
             Ci trovi ai numeri:
             <br />
-            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
             <div style={{ fontSize: '1.1em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
+            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
           </p>
         </div>
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-4 p-3 rounded" noValidate style={{ backgroundColor: '#d7e0dd' }}>
@@ -540,8 +552,8 @@ export default function Partecipazione() {
             <br />
             Ci trovi ai numeri:
             <br />
-            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
             <div style={{ fontSize: '1.1em' }}> <strong>Federico</strong> +39 373 743 11 23</div>
+            <div style={{ fontSize: '1.1em' }}><strong>Maria Teresa</strong> +39 339 775 67 35</div>
           </p>
           <br />
           <div className="d-flex justify-content-center mt-3">

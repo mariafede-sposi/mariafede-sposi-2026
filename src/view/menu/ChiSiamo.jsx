@@ -45,10 +45,10 @@ export default function ChiSiamo() {
                         Il loro incontro risale al lontano 2015 A.C. (Avanti Covid) dove, durante gli anni dell'università, hanno piantato il seme del loro amore che sboccerà
                         solo dopo 6 anni ed una pandemia! <br />
                         Strano ma vero, nel 2021 D.C. (Dopo Covid) decidono di mettersi insieme e da allora non si sono mai più allontanati l'uno dall'altra.<br />
-                        Potremmo scrivere un libro sulla loro storia d'amore e su cosa hanno passato insieme, ma ci auguriamo che nei prossimi capitoli voi possiate farne parte
+                        Potremmo scrivere un libro sulla loro storia d'amore e su cosa hanno passato insieme, ma ci auguriamo che nei prossimi capitoli voi possiate farne parte.
 
                         <p style={{ fontStyle: 'italic', fontSize: 14, marginTop: 5 }}>
-                            (Nessuna Maria Teresa è stata maltrattata per scrivere questo testo.)
+                            (Nessuna Maria Teresa è stata maltrattata per scrivere questo testo)
                         </p>
                     </p>
                     <a

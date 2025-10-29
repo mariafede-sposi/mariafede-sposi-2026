@@ -7,22 +7,37 @@ export default function IlRicevimento({ show, handleShow, handleClose }) {
                 <div className="ramo_img"></div>
                 <h3>Villa Pocci</h3>
                 <h3>Marino (RM)</h3>
-                <div style={{ display: 'flex', alignItems: 'center', placeContent: 'center', margin: '20px 0' }}>
-                    <div
-                        onClick={() => window.open("https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_", '_blank')}
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        placeContent: 'center',
+                        margin: '20px 0',
+                    }}
+                >
+                    <a
+                        href="https://www.google.com/maps/place/Villa+Pocci/@41.7623766,12.6691331,17z/data=!4m6!3m5!1s0x132585d94763fe45:0x8f38feaa293a25b1!8m2!3d41.7623726!4d12.671708!16s%2Fg%2F1vgn4zg_"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="buttons"
-
+                        style={{ textDecoration: 'none' }}
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-geo-alt-fill"
+                                viewBox="0 0 16 16"
+                            >
                                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
                             </svg>
                             <div style={{ marginLeft: 5 }}>Villa Pocci</div>
-
                         </div>
-                    </div>
+                    </a>
                 </div>
+
                 <div style={{ padding: '0 20px' }}>
                     <i>O mar! O sol! L'auliv!</i><br /> Non trovandole abbiamo puntato su una bellissima villa con vista lago. Sperando di poter sfruttare gli ampi giardini, vi aspettiamo affamati!
                 </div>

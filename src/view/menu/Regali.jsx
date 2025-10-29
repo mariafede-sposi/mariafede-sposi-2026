@@ -20,7 +20,7 @@ export default function Regali({ show, handleShow, handleClose }) {
 
             <div style={{ backgroundColor: '#D7E0DD', padding: 20, paddingBottom: 100 }}>
                 <h3>Siamo felici della vostra presenza, <br />che è il regalo più importante; </h3>
-                <h3>se vorrete, un contributo economico ci sarà  <br />di grande aiuto per il nostro cammino insieme, <br />ma soprattutto per il viaggio di nozze <br />in ✨ GIAPPONE ✨</h3>
+                <h3>se vorrete, un contributo economico ci sarà  <br />di grande aiuto per il nostro cammino insieme, <br />ma soprattutto per il viaggio di nozze in<br />✨ GIAPPONE ✨</h3>
 
                 <br />
                 Federico Cremona
