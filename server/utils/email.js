@@ -48,7 +48,7 @@ export async function inviaEmail(payload, errori, TIMEOUT_MS, withTimeout) {
                 headers: {
                     'accept': 'application/json',
                     'content-type': 'application/json',
-                    'api-key': process.env.EMAIL_PASS
+                    'api-key': process.env.BREVO_API_KEY
                 },
                 body: JSON.stringify(body)
             });
@@ -86,7 +86,7 @@ export async function inviaMailErrore(payload, errori, TIMEOUT_MS, withTimeout) 
                 headers: {
                     'accept': 'application/json',
                     'content-type': 'application/json',
-                    'api-key': process.env.EMAIL_PASS
+                    'api-key': process.env.BREVO_API_KEY
                 },
                 body: JSON.stringify(body)
             });
